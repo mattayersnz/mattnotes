@@ -1,38 +1,38 @@
-// import { useQuery } from "@apollo/client";
-// import gql from "graphql-tag";
-// import useTaskMutations from "./useTaskMutations";
+import { useQuery } from "@apollo/client";
+import gql from "graphql-tag";
+import useNoteMutations from "./useNoteMutations";
 
-// const useTasks = (project) => {
-//   const { tasks, loading } = useAllTasksInProject(project);
-//   const { addTask, updateTask } = useTaskMutations(project);
-//   return {
-//     loading,
-//     tasks,
-//     updateTask,
-//     addTask,
-//   };
-// };
-// export default useTasks;
+const useNotes = (project) => {
+  const { notes, loading } = useAllNotesInProject(project);
+  const { addNote, updateNote } = useNoteMutations(project);
+  return {
+    loading,
+    notes,
+    updateNote,
+    addNote,
+  };
+};
+export default useNotes;
 
-// function useAllTasksInProject(project) {
-//   const { data, loading, error } = useQuery(
-//     gql`
-//       query GetAllTasksForProject($partition: String!) {
-//         tasks(query: { _partition: $partition }) {
-//           _id
-//           name
-//           status
-//         }
-//       }
-//     `,
-//     { variables: { partition: project.partition } }
-//   );
-//   if (error) {
-//     throw new Error(`Failed to fetch tasks: ${error.message}`);
-//   }
+function useAllNotesInProject(project) {
+  const { data, loading, error } = useQuery(
+    gql`
+      query GetAllNotesForProject($partition: String!) {
+        notes(query: { _partition: $partition }) {
+          _id
+          name
+          status
+        }
+      }
+    `,
+    { variables: { partition: project.partition } }
+  );
+  if (error) {
+    throw new Error(`Failed to fetch notes: ${error.message}`);
+  }
 
-//   // If the query has finished, return the tasks from the result data
-//   // Otherwise, return an empty list
-//   const tasks = data?.tasks ?? [];
-//   return { tasks, loading };
-// }
+  // If the query has finished, return the notes from the result data
+  // Otherwise, return an empty list
+  const notes = data?.notes ?? [];
+  return { notes, loading };
+}

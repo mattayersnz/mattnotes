@@ -1,110 +1,110 @@
-// import { ObjectId } from "bson";
-// import { useMutation } from "@apollo/client";
-// import gql from "graphql-tag";
+import { ObjectId } from "bson";
+import { useMutation } from "@apollo/client";
+import gql from "graphql-tag";
 
-// export default function useTaskMutations(project) {
-//   return {
-//     addTask: useAddTask(project),
-//     updateTask: useUpdateTask(project),
-//     deleteTask: useDeleteTask(project),
-//   };
-// }
+export default function useNoteMutations(project) {
+  return {
+    createNote: useCreateNote(project),
+    updateNote: useUpdateNote(project),
+    deleteNote: useDeleteNote(project),
+  };
+}
 
-// const AddTaskMutation = gql`
-//   mutation AddTask($task: TaskInsertInput!) {
-//     addedTask: insertOneTask(data: $task) {
-//       _id
-//       _partition
-//       name
-//       status
-//     }
-//   }
-// `;
+const CreateNoteMutation = gql`
+  mutation CreateNote($note: NoteInsertInput!) {
+    createdNote: insertOneNote(data: $note) {
+      _id
+      _partition
+      name
+      status
+    }
+  }
+`;
 
-// const UpdateTaskMutation = gql`
-//   mutation UpdateTask($taskId: ObjectId!, $updates: TaskUpdateInput!) {
-//     updatedTask: updateOneTask(query: { _id: $taskId }, set: $updates) {
-//       _id
-//       _partition
-//       name
-//       status
-//     }
-//   }
-// `;
+const UpdateNoteMutation = gql`
+  mutation UpdateNote($noteId: ObjectId!, $updates: NoteUpdateInput!) {
+    updatedNote: updateOneNote(query: { _id: $noteId }, set: $updates) {
+      _id
+      _partition
+      name
+      status
+    }
+  }
+`;
 
-// const DeleteTaskMutation = gql`
-//   mutation DeleteTask($taskId: ObjectId!) {
-//     deletedTask: deleteOneTask(query: { _id: taskId }) {
-//       _id
-//       _partition
-//       name
-//       status
-//     }
-//   }
-// `;
+const DeleteNoteMutation = gql`
+  mutation DeleteNote($noteId: ObjectId!) {
+    deletedNote: deleteOneNote(query: { _id: noteId }) {
+      _id
+      _partition
+      name
+      status
+    }
+  }
+`;
 
-// const TaskFieldsFragment = gql`
-//   fragment TaskFields on Task {
-//     _id
-//     _partition
-//     status
-//     name
-//   }
-// `;
+const NoteFieldsFragment = gql`
+  fragment NoteFields on Note {
+    _id
+    _partition
+    status
+    name
+  }
+`;
 
-// function useAddTask(project) {
-//   const [addTaskMutation] = useMutation(AddTaskMutation, {
-//     // Manually save added Tasks into the Apollo cache so that Task queries automatically update
-//     // For details, refer to https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-//     update: (cache, { data: { addedTask } }) => {
-//       cache.modify({
-//         fields: {
-//           tasks: (existingTasks = []) => [
-//             ...existingTasks,
-//             cache.writeFragment({
-//               data: addedTask,
-//               fragment: TaskFieldsFragment,
-//             }),
-//           ],
-//         },
-//       });
-//     },
-//   });
+function useCreateNote(project) {
+  const [CreateNoteMutation] = useMutation(CreateNoneMutation, {
+    // Manually save added Notes into the Apollo cache so that Note queries automatically update
+    // For details, refer to https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    update: (cache, { data: { createdNote } }) => {
+      cache.modify({
+        fields: {
+          notes: (existingNotes = []) => [
+            ...existingNotes,
+            cache.writeFragment({
+              data: createdNote,
+              fragment: NoteFieldsFragment,
+            }),
+          ],
+        },
+      });
+    },
+  });
 
-//   const addTask = async (task) => {
-//     const { addedTask } = await addTaskMutation({
-//       variables: {
-//         task: {
-//           _id: new ObjectId(),
-//           _partition: project.partition,
-//           status: "Open",
-//           ...task,
-//         },
-//       },
-//     });
-//     return addedTask;
-//   };
-//   return addTask;
-// }
+  const createNote = async (note) => {
+    const { createdNote } = await CreateNoteMutation({
+      variables: {
+        note: {
+          _id: new ObjectId(),
+          _partition: project.partition,
+          status: "Active",
+          ...note,
+        },
+      },
+    });
+    return createdNote;
+  };
+  return createNote;
+}
 
-// function useUpdateTask(project) {
-//   const [updateTaskMutation] = useMutation(UpdateTaskMutation);
-//   const updateTask = async (task, updates) => {
-//     const { updatedTask } = await updateTaskMutation({
-//       variables: { taskId: task._id, updates },
-//     });
-//     return updatedTask;
-//   };
-//   return updateTask;
-// }
+function useUpdateNote(project) {
+  const [updateNoteMutation] = useMutation(UpdateNoteMutation);
+  const updateNote = async (note, updates) => {
+    const { updatedNote } = await updateNoteMutation({
+      variables: { noteId: note._id, updates },
+    });
+    return updatedNote;
+  };
+  return updateNote;
+}
 
-// function useDeleteTask(project) {
-//   const [deleteTaskMutation] = useMutation(DeleteTaskMutation);
-//   const deleteTask = async (task) => {
-//     const { deletedTask } = await deleteTaskMutation({
-//       variables: { taskId: task._id },
-//     });
-//     return deletedTask;
-//   };
-//   return deleteTask;
-// }
+function useDeleteNote(project) {
+  const [deleteNoteMutation] = useMutation(DeleteNoteMutation);
+  const deleteNote = async (note) => {
+    const { deletedNote } = await deleteNoteMutation({
+      variables: { noteId: note._id },
+    });
+    return deletedNote;
+  };
+  return deleteNote;
+}
