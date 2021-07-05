@@ -13,10 +13,8 @@ export default function useNoteMutations(project) {
 const CreateNoteMutation = gql`
   mutation CreateNote($note: NoteInsertInput!) {
     createdNote: insertOneNote(data: $note) {
-      _id
       _partition
-      name
-      status
+      ownerId
     }
   }
 `;
@@ -26,8 +24,6 @@ const UpdateNoteMutation = gql`
     updatedNote: updateOneNote(query: { _id: $noteId }, set: $updates) {
       _id
       _partition
-      name
-      status
     }
   }
 `;
@@ -37,7 +33,6 @@ const DeleteNoteMutation = gql`
     deletedNote: deleteOneNote(query: { _id: noteId }) {
       _id
       _partition
-      name
       status
     }
   }
@@ -53,7 +48,7 @@ const NoteFieldsFragment = gql`
 `;
 
 function useCreateNote(project) {
-  const [CreateNoteMutation] = useMutation(CreateNoneMutation, {
+  const [createNoteMutation] = useMutation(CreateNoteMutation, {
     // Manually save added Notes into the Apollo cache so that Note queries automatically update
     // For details, refer to https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
     update: (cache, { data: { createdNote } }) => {
@@ -72,16 +67,16 @@ function useCreateNote(project) {
   });
 
   const createNote = async (note) => {
-    const { createdNote } = await CreateNoteMutation({
+    const { createdNote } = await createNoteMutation({
       variables: {
         note: {
-          _id: new ObjectId(),
-          _partition: project.partition,
-          status: "Active",
+          _partition: `note=${project.id}`,
+          ownerId: project.id,
           ...note,
         },
-      },
+      }
     });
+   
     return createdNote;
   };
   return createNote;
@@ -89,9 +84,9 @@ function useCreateNote(project) {
 
 function useUpdateNote(project) {
   const [updateNoteMutation] = useMutation(UpdateNoteMutation);
-  const updateNote = async (note, updates) => {
+  const updateNote = async (noteId, updates) => {
     const { updatedNote } = await updateNoteMutation({
-      variables: { noteId: note._id, updates },
+      variables: { noteId: noteId, updates },
     });
     return updatedNote;
   };

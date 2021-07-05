@@ -11,13 +11,7 @@ import {
   Leaf
 } from './Elements'
 import { noteLayout } from './NoteLayout';
-import { useQuery, useMutation } from "@apollo/client";
-// import { SAVE_NOTES, GET_NOTE } from './ApolloCalls'
-// import cloneDeep from 'clone-deep';
-// import omitDeep from 'omit-deep';
-// import { useBeforeunload } from 'react-beforeunload';
-// import { NewNote } from './Transformations';
-import { v4 as uuidv4 } from 'uuid';
+import { useBeforeunload } from 'react-beforeunload';
 
 
 const HunchEditor = (props) => {
@@ -52,15 +46,12 @@ const HunchEditor = (props) => {
       }
     }, [])
 
-    // // Save on window close
-    // useBeforeunload((event) => {
-    //   if (data.graph.blocks !== value) {
-    //     const graph = omitDeep(cloneDeep(data), ['__typename', '_id'])
-    //     graph.graph.blocks = value
-    //     console.log("Graph", graph)
-    //     saveNotes({variables: omitDeep(cloneDeep(graph), ['__typename', '_id'])});
-    //   }
-    // });
+    // Save on window close
+    useBeforeunload(() => {
+      if (value) {
+        props.saveNote();
+      }
+    });
 
     // // GraphQL
     // const { loading, error, data } = useQuery(GET_NOTE);
@@ -85,31 +76,31 @@ const HunchEditor = (props) => {
             renderLeaf={renderLeaf}
             onKeyDown={event => {
 
+              // console.log('eventKey',  event.key)
               // Create Link -- NOT COMPLETE
               if (event.metaKey && event.key === '[') {
                   event.preventDefault();
 
-                  const [match] = Editor.nodes(editor, {
-                    match: n => n.link === true,
-                  })
+                  // const [match] = Editor.nodes(editor, {
+                  //   match: n => n.link === true,
+                  // })
 
-                  const newNoteId = uuidv4();
-                  Transforms.setNodes(
-                      editor,
-                      {
-                        link: match ? false: true,
-                        noteId: newNoteId
-                      },
-                      { match: n => Text.isText(n), split: match ? false : true}
-                  );
+                  // Transforms.setNodes(
+                  //     editor,
+                  //     {
+                  //       link: match ? false: true,
+                  //       noteId: newNoteId
+                  //     },
+                  //     { match: n => Text.isText(n), split: match ? false : true}
+                  // );
 
-                  const [node] = Editor.node(editor, editor.selection);
-                    if (!node.text) return;
+                  // const [node] = Editor.node(editor, editor.selection);
+                  //   if (!node.text) return;
 
-                  const selectedText = node.text.slice(
-                      editor.selection.anchor.offset,
-                      editor.selection.focus.offset
-                  );
+                  // const selectedText = node.text.slice(
+                  //     editor.selection.anchor.offset,
+                  //     editor.selection.focus.offset
+                  // );
 
                 //   const graph = data.graph
 
@@ -135,15 +126,18 @@ const HunchEditor = (props) => {
               //     updateNote(selectedId);
               // }
 
-              // Save Note
-            //   if (event.metaKey && event.key === 's') {
-            //       event.preventDefault();
-            //       const graph = omitDeep(cloneDeep(data), ['__typename', '_id'])
-            //       graph.graph.blocks = value
-            //       console.log("Note saved!", graph)
-            //       saveNotes({variables: omitDeep(cloneDeep(graph), ['__typename', '_id'])});
+              //Logout
+              if (event.metaKey && event.key === 'Escape') {
+                console.log('here')
+                event.preventDefault();
+                props.logout();
+              }
 
-            //   }
+              // Save Note
+              if (event.metaKey && event.key === 's') {
+                  event.preventDefault();
+                  props.saveNote();
+              }
 
               // Title Block
               if (event.metaKey && event.key === ';') {

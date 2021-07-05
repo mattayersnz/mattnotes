@@ -8,6 +8,21 @@ import LGCard from "./Card";
 import { uiColors } from "@leafygreen-ui/palette";
 import validator from "validator";
 import Loading from "./Loading";
+import useNotes from "../graphql/useNotes";
+import { printIntrospectionSchema } from "graphql";
+
+const initialValue = {
+  blocks: [
+    {
+      type: 'title',
+      children: [{ text: 'Thoughts' }],
+    },
+    {
+      type: 'paragraph',
+      children: [{ text: 'go here' }],
+    }
+  ]
+};
 
 export default function LoginScreen() {
   const app = useRealmApp();
