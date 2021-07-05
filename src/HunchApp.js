@@ -29,7 +29,7 @@ export default function HunchApp() {
   };
 
   const newNote = () => {
-                            const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
+    const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
     graph.blocks = value
     // console.log("Note saved!", graph)
     updateNote(id, omitDeep(cloneDeep(graph), ['__typename', '_id']));
@@ -42,7 +42,6 @@ export default function HunchApp() {
 
 
   const saveNote = () => {
-    debugger;
     const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
     graph.blocks = value
     console.log("Note saved!", graph)
@@ -52,9 +51,12 @@ export default function HunchApp() {
   if (loading || !note) {
     if (!loading && !note && !isCreating) { 
       // Create a note if none
-      console.log('create note')
-      createNote({blocks: initialValue});
       setIsCreating(true);
+      (async () => {
+        const newNote = await createNote({blocks: initialValue});
+        console.log('new note..', newNote)
+      })();
+      
     }
     return 'loading...';
   }
@@ -71,7 +73,11 @@ export default function HunchApp() {
 
 const initialValue = [
   {
+    type: 'title',
+    children: [{ text: 'Thoughts...' }],
+  },
+  {
     type: 'paragraph',
-    children: [{ text: 'Try it out for yourself!' }],
+    children: [{ text: 'go here' }],
   }
 ]
