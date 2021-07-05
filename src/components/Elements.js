@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
 import star from '../images/star.svg';
+import question from '../images/question.svg';
+import {Indicator} from '../globalstyles/Indicator';
 // import { CheckNoteBlocksUL } from './Store'
 
 // Paragraph inline elements
@@ -108,21 +110,15 @@ const StyledDottedListItem = styled.span`
 
 // Leaf: Link, Bold
 export const Leaf = props => {
-    // if (props.leaf.link) {
-      // check if linked note has any ul note blocks
-    //   if (CheckNoteBlocksUL(props.leaf.noteId)) {
-    //     return (
-    //       <PageLinkWithULs {...props.attributes}>
-    //           {props.children}
-    //       </PageLinkWithULs>
-    //     )
-    //   }
-    //   else return (
-    //       <PageLink {...props.attributes}>
-    //           {props.children}
-    //       </PageLink>
-    //   )
-    // }
+  
+    if (props.leaf.link) {
+      const linkType = Indicator[4];
+      return (
+          <PageLink {...props.attributes} indicator={linkType}>
+              {props.children}
+          </PageLink>
+      )
+    }
     return (
       <span {...props.attributes} style={{fontWeight: props.leaf.bold ? 'bold' : ''}}>
           {props.children}
@@ -130,8 +126,9 @@ export const Leaf = props => {
     );
 };
 
+// Page links with indicators
 const PageLink = styled.span`
-  background: linear-gradient(259.21deg, #6A27BF -88.16%, #6A27BF 79.64%);
+  background: ${(props) => props.indicator};
   border-radius: 3px;
   padding: 1px 3px 1px 3px;
   font-family: 'Rubik', 'sans serif';
@@ -146,4 +143,37 @@ const PageLinkWithULs = styled.span`
   font-family: 'Rubik', 'sans serif';
   font-size: 1rem;
   color: #EBEBEB;
+`
+
+// Question Block
+export const QuestionBlock = ({ attributes, children }) => {
+  return (
+    <div>
+      <StyledQuestionBlock {...attributes}>
+        <StyledQuestionBlockContainer contentEditable={false}>
+          <StyledQuestionImg
+            src={question}
+          />
+        </StyledQuestionBlockContainer>
+        {children}
+      </StyledQuestionBlock>
+    </div>
+  )
+}
+
+const StyledQuestionBlockContainer = styled.div`
+display: inline-block;
+`
+
+const StyledQuestionImg = styled.img`
+width: 12px;
+padding-right: 8px;
+padding-left: 2px;
+`
+
+const StyledQuestionBlock = styled.span`
+font-family: 'Rubik', 'sans serif';
+font-size: 1rem;
+color: #EBEBEB;
+padding-bottom: 7px;
 `

@@ -8,6 +8,7 @@ import {
   OrderedListItem,
   DottedListItem,
   StarElement,
+  QuestionBlock,
   Leaf
 } from './Elements'
 import { noteLayout } from './NoteLayout';
@@ -41,6 +42,8 @@ const HunchEditor = (props) => {
             return <TitleElement {...props} />
         case 'star':
             return <StarElement {...props} />
+        case 'question': 
+          return <QuestionBlock {...props} />
         default:
             return <Paragraph {...props} />
       }
@@ -165,6 +168,20 @@ const HunchEditor = (props) => {
                   );
               }
 
+              // Question Block
+              if (event.metaKey && event.key === 'e') {
+                console.log('e', event.key)
+                event.preventDefault();
+                const [match] = Editor.nodes(editor, {
+                  match: n => n.type === 'question',
+                })
+                Transforms.setNodes(
+                    editor,
+                    { type: match ? 'paragraph': 'question'},
+                    { match: n => Editor.isBlock(editor, n) }
+                );
+              }
+
               // Unordered List Block
               if (event.metaKey && event.key === '-') {
                   event.preventDefault();
@@ -217,6 +234,18 @@ const HunchEditor = (props) => {
                   );
               }
 
+              // Indicator Styling
+              if (event.metaKey && event.key === 'k') {
+                event.preventDefault();
+                const [match] = Editor.nodes(editor, {
+                  match: n => n.link === true,
+                })
+                Transforms.setNodes(
+                    editor,
+                    { link: match ? false : true },
+                    { match: n => Text.isText(n), split: match ? false : true}
+                );
+            }
             }}
           />
       </Slate>
