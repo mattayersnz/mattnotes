@@ -6,6 +6,7 @@ import useNotes from "./graphql/useNotes";
 import { useQuery, useMutation } from "@apollo/client";
 import cloneDeep from 'clone-deep';
 import omitDeep from 'omit-deep';
+import {Action} from './components/Action';
 // import { useBeforeunload } from 'react-beforeunload';
 // import { NewNote } from './Transformations';
 
@@ -23,6 +24,7 @@ export default function HunchApp() {
   const [isCreating, setIsCreating] = useState(false);
   const [value, setValue] = useState(initialValue);
   const [id, setIdValue] = useState(null);
+  const [isAction, setIsAction] = useState(false);
 
   const handleChange = (value) => {
     setValue(value)
@@ -34,11 +36,20 @@ export default function HunchApp() {
     // console.log("Note saved!", graph)
     updateNote(id, omitDeep(cloneDeep(graph), ['__typename', '_id']));
   }
+  
 
-  const logout = () => {
+  const logoutStart = () => {
+    setIsAction(true)
     //TODO: confirm logout action with user
+
     app.logOut();
   }
+
+  const logoutConfirm = () => {
+    console.log('logout');
+    app.logOut()
+  }
+
 
 
   const saveNote = () => {
@@ -66,7 +77,8 @@ export default function HunchApp() {
   }
   return (
     <Container>
-      <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logout} />
+      <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logoutStart} />
+      { isAction && <Action actionText={"logout?"} actionEvent={logoutConfirm} /> }
     </Container>
   );
 }
