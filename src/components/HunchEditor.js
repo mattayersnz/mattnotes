@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { createEditor, Transforms, Editor, Text } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
@@ -56,16 +56,6 @@ const HunchEditor = (props) => {
       }
     });
 
-    // // GraphQL
-    // const { loading, error, data } = useQuery(GET_NOTE);
-    // const [saveNotes] = useMutation(SAVE_NOTES);
-    // if (loading) return 'Loading...';
-    // if (error) return `Error! ${error.message}`;
-    // if (isLoaded === false) {
-    //   handleChange(data.graph.blocks)
-    //   setIsLoaded(true)
-    // }
-
     // Render Editor
     return (
       <>
@@ -79,7 +69,6 @@ const HunchEditor = (props) => {
             renderLeaf={renderLeaf}
             onKeyDown={event => {
 
-              // console.log('eventKey',  event.key)
               // Create Link -- NOT COMPLETE
               if (event.metaKey && event.key === '[') {
                   event.preventDefault();

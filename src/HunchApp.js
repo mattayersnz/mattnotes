@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import HunchEditor from './components/HunchEditor';
 import { useRealmApp } from "./RealmApp";
 import useNotes from "./graphql/useNotes";
-import { useQuery, useMutation } from "@apollo/client";
 import cloneDeep from 'clone-deep';
 import omitDeep from 'omit-deep';
 import {Action} from './components/Action';
@@ -30,26 +29,13 @@ export default function HunchApp() {
     setValue(value)
   };
 
-  const newNote = () => {
-    const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
-    graph.blocks = value
-    // console.log("Note saved!", graph)
-    updateNote(id, omitDeep(cloneDeep(graph), ['__typename', '_id']));
-  }
-  
-
+  //logout actions
   const logoutStart = () => {
     setIsAction(true)
-    //TODO: confirm logout action with user
-
   }
-
   const logoutConfirm = () => {
-    console.log('logout');
     app.logOut()
   }
-
-
 
   const saveNote = () => {
     const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
@@ -70,10 +56,12 @@ export default function HunchApp() {
     }
     return 'loading...';
   }
-  if (!loading && note._id != id) {
+  
+  if (!loading && note._id !== id) {
     setIdValue(note._id);
     handleChange(note.blocks);
   }
+
   return (
     <Container>
       <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logoutStart} isAction={isAction} />

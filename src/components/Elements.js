@@ -136,14 +136,14 @@ const PageLink = styled.span`
   color: #EBEBEB;
 `
 
-const PageLinkWithULs = styled.span`
-  background: #FF4F47;
-  border-radius: 3px;
-  padding: 1px 3px 1px 3px;
-  font-family: 'Rubik', 'sans serif';
-  font-size: 1rem;
-  color: #EBEBEB;
-`
+// const PageLinkWithULs = styled.span`
+//   background: #FF4F47;
+//   border-radius: 3px;
+//   padding: 1px 3px 1px 3px;
+//   font-family: 'Rubik', 'sans serif';
+//   font-size: 1rem;
+//   color: #EBEBEB;
+// `
 
 // Question Block
 export const QuestionBlock = ({ attributes, children }) => {

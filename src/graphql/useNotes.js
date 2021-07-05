@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client";
-import { isCompositeType } from "graphql";
 import gql from "graphql-tag";
 import useNoteMutations from "./useNoteMutations";
 
