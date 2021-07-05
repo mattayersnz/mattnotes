@@ -42,7 +42,6 @@ export default function HunchApp() {
     setIsAction(true)
     //TODO: confirm logout action with user
 
-    app.logOut();
   }
 
   const logoutConfirm = () => {
@@ -77,7 +76,7 @@ export default function HunchApp() {
   }
   return (
     <Container>
-      <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logoutStart} />
+      <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logoutStart} isAction={isAction} />
       { isAction && <Action actionText={"logout?"} actionEvent={logoutConfirm} /> }
     </Container>
   );

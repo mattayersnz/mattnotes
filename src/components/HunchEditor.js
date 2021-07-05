@@ -206,7 +206,8 @@ const HunchEditor = (props) => {
               }
 
               // New Block
-              if (event.key === 'Enter') {
+              if (event.key === 'Enter' && !props.isAction) {
+                console.log('hmm')
                   const [match] = Editor.nodes(editor, {
                       match: n => n.type !== 'paragraph',
                   })

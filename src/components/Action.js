@@ -5,8 +5,7 @@ import enter from '../images/enter.svg';
 export const Action = ({ actionText, actionEvent }) => {
     document.addEventListener('keydown', function (event) {
         event.preventDefault();
-        if (event.key === 13) {
-            console.log(`Key: ${event.key} with keycode ${event.keyCode} has been pressed`);
+        if (event.keyCode === 13) {
             actionEvent();
         }
     });
@@ -43,25 +42,3 @@ font-size: 1.5rem;
 color: #EBEBEB;
 padding-bottom: 7px;
 `
-// import React from 'react';
-// // import enter from '../images/enter.svg';
-// import styled from 'styled-components';
-// // Action
-// export const Action = ({ actionText, actionEvent }) => {
-//     // document.addEventListener('keydown', function(event) {
-//     //     console.log(`Key: ${event.key} with keycode ${event.keyCode} has been pressed`);
-//     // });
-//   return (
-//     <div>
-//       <ActionBox>
-//        kk
-//       </ActionBox>
-//     </div>
-//   )
-// }
-// ​
-
-// const ActionBox = styled.div`
-//   margin: 20%;
-//   margin-top: 10%;
-// `;
