@@ -41,7 +41,6 @@ export default function HunchApp() {
   const saveNote = () => {
     const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
     graph.blocks = value
-    console.log("Note saved!", omitDeep(cloneDeep(graph), ['__typename', '_id']))
     updateNote(id, omitDeep(cloneDeep(graph), ['__typename', '_id']));
   }
 
@@ -50,8 +49,7 @@ export default function HunchApp() {
       // Create a note if none
       setIsCreating(true);
       (async () => {
-        const newNote = await createNote({blocks: initialValue});
-        console.log('new note..', newNote)
+        await createNote({blocks: initialValue});
       })();
       
     }

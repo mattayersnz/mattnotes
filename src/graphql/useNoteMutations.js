@@ -75,7 +75,6 @@ function useCreateNote(project) {
         },
       }
     });
-    console.log('createdNote',createdNote)
     return createdNote;
   };
   return createNote;
