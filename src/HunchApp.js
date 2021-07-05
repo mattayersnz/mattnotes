@@ -9,6 +9,8 @@ import {Action} from './components/Action';
 // import { useBeforeunload } from 'react-beforeunload';
 // import { NewNote } from './Transformations';
 
+import {listenerEnter} from './keyboardHelper';
+
 const Container = styled.div`
   margin: 20%;
   margin-top: 10%;
@@ -29,18 +31,17 @@ export default function HunchApp() {
     setValue(value)
   };
 
+
   //logout actions
   const logoutStart = () => {
-    setIsAction(true)
-  }
-  const logoutConfirm = () => {
-    app.logOut()
+    setIsAction(true);
+    listenerEnter(isAction, app.logOut())
   }
 
   const saveNote = () => {
     const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
     graph.blocks = value
-    console.log("Note saved!", graph)
+    console.log("Note saved!", omitDeep(cloneDeep(graph), ['__typename', '_id']))
     updateNote(id, omitDeep(cloneDeep(graph), ['__typename', '_id']));
   }
 
@@ -65,7 +66,7 @@ export default function HunchApp() {
   return (
     <Container>
       <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logoutStart} isAction={isAction} />
-      { isAction && <Action actionText={"logout?"} actionEvent={logoutConfirm} /> }
+      { isAction && <Action actionText={"logout?"} /> }
     </Container>
   );
 }

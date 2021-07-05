@@ -2,13 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import enter from '../images/enter.svg';
 // Action
-export const Action = ({ actionText, actionEvent }) => {
-    document.addEventListener('keydown', function (event) {
-        event.preventDefault();
-        if (event.keyCode === 13) {
-            actionEvent();
-        }
-    });
+export const Action = ({ actionText }) => {
     return (
         <div>
             <ActionBox>

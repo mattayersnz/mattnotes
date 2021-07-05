@@ -120,7 +120,6 @@ const HunchEditor = (props) => {
 
               //Logout
               if (event.metaKey && event.key === 'Escape') {
-                console.log('here')
                 event.preventDefault();
                 props.logout();
               }
@@ -159,7 +158,6 @@ const HunchEditor = (props) => {
 
               // Question Block
               if (event.metaKey && event.key === 'e') {
-                console.log('e', event.key)
                 event.preventDefault();
                 const [match] = Editor.nodes(editor, {
                   match: n => n.type === 'question',
@@ -196,7 +194,6 @@ const HunchEditor = (props) => {
 
               // New Block
               if (event.key === 'Enter' && !props.isAction) {
-                console.log('hmm')
                   const [match] = Editor.nodes(editor, {
                       match: n => n.type !== 'paragraph',
                   })
