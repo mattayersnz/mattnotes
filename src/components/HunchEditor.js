@@ -42,7 +42,7 @@ const HunchEditor = (props) => {
             return <TitleElement {...props} />
         case 'star':
             return <StarElement {...props} />
-        case 'question': 
+        case 'question':
           return <QuestionBlock {...props} />
         default:
             return <Paragraph {...props} />
