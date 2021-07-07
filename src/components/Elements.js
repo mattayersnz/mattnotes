@@ -19,7 +19,7 @@ const StyledParagraph = styled.span`
   font-size: 1rem;
   color: #EBEBEB;
   display: block;
-  padding-bottom: 7px;
+  margin-bottom: 7px;
 `
 
 // H1 block elements
@@ -110,7 +110,7 @@ const StyledDottedListItem = styled.span`
 
 // Leaf: Link, Bold
 export const Leaf = props => {
-  
+
     if (props.leaf.link) {
       const linkType = Indicator[4];
       return (
