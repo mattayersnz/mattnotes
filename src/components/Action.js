@@ -23,7 +23,6 @@ const ActionBox = styled.div`
 position: absolute;
 top: 40%;
 left: 30%;
-/* margin: 24px; */
 padding: 22px;
 background: #313131;
 border-radius: 5px;
@@ -44,7 +43,7 @@ justify-content: space-between;
 
 const Text = styled.span`
 font-family: 'Rubik', 'sans serif';
-font-size: 2rem;
+font-size: 1.7rem;
 color: #EBEBEB;
 `
 
@@ -82,7 +81,7 @@ width: 24px;
 
 const Esc = styled.span`
 font-family: 'Rubik', 'sans serif';
-font-size: .7rem;
+font-size: .9rem;
 color: #EBEBEB;
 padding-bottom: 7px;
 text-align: right;

@@ -9,7 +9,7 @@ import { Action } from './components/Action';
 // import { useBeforeunload } from 'react-beforeunload';
 // import { NewNote } from './Transformations';
 
-// import {listenerEnter} from './keyboardHelper';
+import {listenerEnter} from './keyboardHelper';
 
 const Container = styled.div`
   margin: 20%;
@@ -35,7 +35,7 @@ export default function HunchApp() {
   //logout actions
   const logoutStart = () => {
     setIsAction(true);
-    // listenerEnter(isAction, app.logOut())
+    listenerEnter(isAction, app.logOut())
   }
 
   const saveNote = () => {
@@ -64,7 +64,7 @@ export default function HunchApp() {
   return (
     <Container>
       <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logoutStart} isAction={isAction} />
-      { isAction && <Action actionText={"Reset your password?"} /> }
+      { isAction && <Action actionText={"Logout?"} /> }
     </Container>
   );
 }
