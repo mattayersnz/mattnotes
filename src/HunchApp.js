@@ -5,7 +5,7 @@ import { useRealmApp } from "./RealmApp";
 import useNotes from "./graphql/useNotes";
 import cloneDeep from 'clone-deep';
 import omitDeep from 'omit-deep';
-import {Action} from './components/Action';
+import { Action } from './components/Action';
 // import { useBeforeunload } from 'react-beforeunload';
 // import { NewNote } from './Transformations';
 
@@ -45,17 +45,17 @@ export default function HunchApp() {
   }
 
   if (loading || !note) {
-    if (!loading && !note && !isCreating) { 
+    if (!loading && !note && !isCreating) {
       // Create a note if none
       setIsCreating(true);
       (async () => {
         await createNote({blocks: initialValue});
       })();
-      
+
     }
     return 'loading...';
   }
-  
+
   if (!loading && note._id !== id) {
     setIdValue(note._id);
     handleChange(note.blocks);
@@ -64,7 +64,7 @@ export default function HunchApp() {
   return (
     <Container>
       <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logoutStart} isAction={isAction} />
-      { isAction && <Action actionText={"logout?"} /> }
+      { isAction && <Action actionText={"Logout?"} /> }
     </Container>
   );
 }
