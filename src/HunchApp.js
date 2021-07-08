@@ -22,10 +22,11 @@ const Container = styled.div`
 export default function HunchApp() {
   const app = useRealmApp();
   const currentLoggedInUser = app.currentUser;
-  const currentUser = { id: currentLoggedInUser._id, lastNoteId: '60e03f562ee565315434ab90' };
+  const currentUser = { id: currentLoggedInUser._id };
 
-  const [id, setIdValue] = useState('60e03f562ee565315434ab90');
-  const { note, createNote, updateNote, loading } = useNotes(currentUser, id);
+  const [loadId, setLoadId] = useState('60e03f562ee565315434ab90');
+  const [id, setIdValue] = useState(null);
+  const { note, createNote, updateNote, loading } = useNotes(currentUser, loadId);
 
   const [isCreating, setIsCreating] = useState(false);
   const [value, setValue] = useState();
@@ -56,12 +57,13 @@ export default function HunchApp() {
         children: [{ text: 'new note' }],
       }
     ]})
+    debugger;
     return newId.toString();
   }
 
   const GetNote = async (linkedNoteId) => {
     // let { note, loading } = getNotes(currentUser, linkedNoteId);
-    setIdValue(linkedNoteId);
+    setLoadId(linkedNoteId);
     // handleChange(note.blocks);
   };
 
