@@ -12,7 +12,7 @@ import { Action } from './components/Action';
 import {listenerEnter} from './keyboardHelper';
 
 const Container = styled.div`
-  margin: 20%;
+  margin: 25%;
   margin-top: 10%;
 `;
 
