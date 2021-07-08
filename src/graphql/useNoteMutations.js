@@ -65,10 +65,11 @@ function useCreateNote(project) {
     },
   });
 
-  const createNote = async (note) => {
+  const createNote = async (newId, note) => {
     const { createdNote } = await createNoteMutation({
       variables: {
         note: {
+          _id: newId,
           _partition: `note=${project.id}`,
           ownerId: project.id,
           ...note,

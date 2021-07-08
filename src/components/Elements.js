@@ -110,8 +110,8 @@ const StyledDottedListItem = styled.span`
 
 // Leaf: Link, Bold
 export const Leaf = props => {
-  
-    if (props.leaf.link) {
+    console.log('props.leaf', props.leaf)
+    if (props.leaf.type === 'link') {
       const linkType = Indicator[4];
       return (
           <PageLink {...props.attributes} indicator={linkType}>

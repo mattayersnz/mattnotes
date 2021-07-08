@@ -1,23 +1,20 @@
 import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
-import useNoteMutations from "./useNoteMutations";
 
-const useNotes = (project, noteId) => {
+const getNotes = (project, noteId) => {
   const { note, loading } = useGetNote(project, noteId);
-  const { createNote, updateNote } = useNoteMutations(project);
   return {
     loading,
-    note,
-    updateNote,
-    createNote,
+    note
   };
 };
-export default useNotes;
+export default getNotes;
 
-function useGetNote(project, noteId) {
-  const { data, loading, error } = useQuery(
+const useGetNote = (project, noteId) => {
+    console.log('note', noteId)
+    const { data, loading, error } = useQuery(
     gql`
-    query GetNoteForUser($noteId: ObjectId!, $partition: String!) {
+    query GetNoteForUser($noteId: String!, $partition: String!) {
       note(query: { _id: $noteId, _partition: $partition}) {
         _id
         blocks {

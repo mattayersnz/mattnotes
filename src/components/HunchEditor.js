@@ -72,19 +72,21 @@ const HunchEditor = (props) => {
               // Create Link -- NOT COMPLETE
               if (event.metaKey && event.key === '[') {
                   event.preventDefault();
+                  const [node] = Editor.node(editor, editor.selection);
+                    if (!node.text) return;
 
-                  // const [match] = Editor.nodes(editor, {
-                  //   match: n => n.link === true,
-                  // })
-
-                  // Transforms.setNodes(
-                  //     editor,
-                  //     {
-                  //       link: match ? false: true,
-                  //       noteId: newNoteId
-                  //     },
-                  //     { match: n => Text.isText(n), split: match ? false : true}
-                  // );
+                  const [match] = Editor.nodes(editor, {
+                    match: n => n.type === 'link',
+                  })
+                  
+                  Transforms.setNodes(
+                      editor,
+                      {
+                        type: match ? 'text' : 'link',
+                        linkNoteId: props.newNote()
+                      },
+                      { match: n => Text.isText(n), split: match ? false : true}
+                  );
 
                   // const [node] = Editor.node(editor, editor.selection);
                   //   if (!node.text) return;
@@ -101,22 +103,21 @@ const HunchEditor = (props) => {
               }
 
               // Navigate to Link -- NOT COMPLETE
-              // if (event.metaKey && event.key === 'y') {
-              //     event.preventDefault();
-              //     let selectedId = '';
-              //
-              //     Transforms.setNodes(
-              //         editor,
-              //         { },
-              //         { match: n => {
-              //           selectedId = n.noteId;
-              //           return false
-              //         }}
-              //     );
-              //
-              //     if (!selectedId) return;
-              //     updateNote(selectedId);
-              // }
+              if (event.metaKey && event.key === 'y') {
+                  event.preventDefault();
+                  let selectedId = '';
+                  Transforms.setNodes(
+                      editor,
+                      { },
+                      { match: n => {
+                        selectedId = n.linkNoteId;
+                        return false
+                      }}
+                  );
+              
+                  if (!selectedId) return;
+                  props.getNote(selectedId);
+              }
 
               //Logout
               if (event.metaKey && event.key === 'Escape') {
