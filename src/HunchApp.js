@@ -6,6 +6,7 @@ import useNotes from "./graphql/useNotes";
 import cloneDeep from 'clone-deep';
 import omitDeep from 'omit-deep';
 import { Action } from './components/Action';
+import ListView from './components/ListView';
 // import { useBeforeunload } from 'react-beforeunload';
 // import { NewNote } from './Transformations';
 
@@ -38,6 +39,9 @@ export default function HunchApp() {
     listenerEnter(isAction, app.logOut())
   }
 
+  //List View
+  const [isListView, setIsListView] = useState(false)
+
   const saveNote = () => {
     const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
     graph.blocks = value
@@ -63,8 +67,17 @@ export default function HunchApp() {
 
   return (
     <Container>
-      <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} logout={logoutStart} isAction={isAction} />
+      <HunchEditor
+        value={value}
+        handleChange={handleChange}
+        saveNote={saveNote}
+        logout={logoutStart}
+        isAction={isAction}
+        isListView={isListView}
+        setIsListView={setIsListView}
+      />
       { isAction && <Action actionText={"Logout?"} /> }
+      { isListView && <ListView /> }
     </Container>
   );
 }

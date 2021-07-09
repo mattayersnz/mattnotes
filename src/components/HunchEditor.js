@@ -124,6 +124,17 @@ const HunchEditor = (props) => {
                 props.logout();
               }
 
+              //ListView
+              if (event.metaKey && event.key === 'u') {
+                event.preventDefault();
+                props.setIsListView(!props.isListView);
+              }
+
+              if (props.isListView === true && event.key === 'Escape') {
+                event.preventDefault();
+                props.setIsListView(!props.isListView);
+              }
+
               // Save Note
               if (event.metaKey && event.key === 's') {
                   event.preventDefault();
