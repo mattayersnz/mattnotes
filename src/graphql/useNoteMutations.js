@@ -37,38 +37,39 @@ const DeleteNoteMutation = gql`
   }
 `;
 
-const NoteFieldsFragment = gql`
-  fragment NoteFields on Note {
-    _id
-    _partition
-    status
-    name
-  }
-`;
+// const NoteFieldsFragment = gql`
+//   fragment NoteFields on Note {
+//     _id
+//     _partition
+//     status
+//     name
+//   }
+// `;
 
 function useCreateNote(project) {
-  const [createNoteMutation] = useMutation(CreateNoteMutation, {
+  const [createNoteMutation] = useMutation(CreateNoteMutation); //, {
     // Manually save added Notes into the Apollo cache so that Note queries automatically update
     // For details, refer to https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    update: (cache, { data: { createdNote } }) => {
-      cache.modify({
-        fields: {
-          notes: (existingNotes = []) => [
-            ...existingNotes,
-            cache.writeFragment({
-              data: createdNote,
-              fragment: NoteFieldsFragment,
-            }),
-          ],
-        },
-      });
-    },
-  });
+  //   update: (cache, { data: { createdNote } }) => {
+  //     cache.modify({
+  //       fields: {
+  //         notes: (existingNotes = []) => [
+  //           ...existingNotes,
+  //           cache.writeFragment({
+  //             data: createdNote,
+  //             fragment: NoteFieldsFragment,
+  //           }),
+  //         ],
+  //       },
+  //     });
+  //   },
+  // });
 
-  const createNote = async (note) => {
+  const createNote = async (newId, note) => {
     const { createdNote } = await createNoteMutation({
       variables: {
         note: {
+          _id: newId,
           _partition: `note=${project.id}`,
           ownerId: project.id,
           ...note,
