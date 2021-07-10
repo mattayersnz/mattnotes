@@ -15,27 +15,14 @@ const useNotes = (project, noteId) => {
 export default useNotes;
 
 function useGetNote(project, noteId) {
+
   const { data, loading, error } = useQuery(
-    gql`
-    query GetNoteForUser($noteId: ObjectId!, $partition: String!) {
-      note(query: { _id: $noteId, _partition: $partition}) {
-        _id
-        blocks {
-          type
-          children {
-            text
-            type
-            bold
-            italic
-            underline
-            linkNoteId
-          }
-        }
-      }
-    }
+  gql`
+    ${noteId ? noteWithIdGql : noteWithoutIdGql}
     `,
     { variables: { noteId: noteId, partition: `note=${project.id}`} }
   );
+
   if (error) {
     throw new Error(`Failed to fetch notes: ${error.message}`);
   }
@@ -44,3 +31,39 @@ function useGetNote(project, noteId) {
   const note = data?.note;
   return { note, loading };
 }
+
+var noteWithIdGql = `
+query GetNoteForUser($noteId: ObjectId!, $partition: String!) {
+  note(query: { _id: $noteId, _partition: $partition}) {
+    _id
+    blocks {
+      type
+      children {
+        text
+        type
+        bold
+        italic
+        underline
+        linkNoteId
+      }
+    }
+  }
+}`;
+
+var noteWithoutIdGql = `
+query GetNoteForUser($partition: String!) {
+  note(query: { _partition: $partition}) {
+    _id
+    blocks {
+      type
+      children {
+        text
+        type
+        bold
+        italic
+        underline
+        linkNoteId
+      }
+    }
+  }
+}`

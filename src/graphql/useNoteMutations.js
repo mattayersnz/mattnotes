@@ -37,14 +37,14 @@ const DeleteNoteMutation = gql`
   }
 `;
 
-const NoteFieldsFragment = gql`
-  fragment NoteFields on Note {
-    _id
-    _partition
-    status
-    name
-  }
-`;
+// const NoteFieldsFragment = gql`
+//   fragment NoteFields on Note {
+//     _id
+//     _partition
+//     status
+//     name
+//   }
+// `;
 
 function useCreateNote(project) {
   const [createNoteMutation] = useMutation(CreateNoteMutation); //, {

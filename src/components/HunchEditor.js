@@ -83,7 +83,7 @@ const HunchEditor = (props) => {
                       editor,
                       {
                         type: match ? 'text' : 'link',
-                        linkNoteId: props.newNote()
+                        linkNoteId: props.newNote(node.text)
                       },
                       { match: n => Text.isText(n), split: match ? false : true}
                   );

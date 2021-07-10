@@ -3,16 +3,14 @@ import styled from "@emotion/styled";
 import HunchEditor from './components/HunchEditor';
 import { useRealmApp } from "./RealmApp";
 import useNotes from "./graphql/useNotes";
-// import getNotes from "./graphql/getNotes";
+import useUsers from "./graphql/useUsers";
 import cloneDeep from 'clone-deep';
 import omitDeep from 'omit-deep';
 import { Action } from './components/Action';
 import { ObjectId } from "bson";
+import { createNewNoteBlocks, createInitialNoteBlocks } from './scripts/noteHelpers';
 
-// import { useBeforeunload } from 'react-beforeunload';
-// import { NewNote } from './Transformations';
-
-import {listenerEnter} from './keyboardHelper';
+import {listenerEnter} from './scripts/keyboardHelpers';
 
 const Container = styled.div`
   margin: 20%;
@@ -23,17 +21,18 @@ export default function HunchApp() {
   const app = useRealmApp();
   const currentLoggedInUser = app.currentUser;
   const currentUser = { id: currentLoggedInUser._id };
+  const activeNoteId = currentLoggedInUser.customData.lastActiveNoteId ? currentLoggedInUser.customData.lastActiveNoteId.$oid : null;
 
-  const [loadId, setLoadId] = useState('60e03f562ee565315434ab90');
+  const [loadId, setLoadId] = useState(activeNoteId);
   const [id, setIdValue] = useState(null);
   const { note, createNote, updateNote, loading } = useNotes(currentUser, loadId);
+  const { updateUser } = useUsers(currentUser);
 
   const [isCreating, setIsCreating] = useState(false);
   const [value, setValue] = useState();
   const [isAction, setIsAction] = useState(false);
 
   const handleChange = (updatedValue) => {
-    console.log('value', updatedValue);
     setValue(updatedValue)
   };
 
@@ -49,22 +48,18 @@ export default function HunchApp() {
     updateNote(id, omitDeep(cloneDeep(graph), ['__typename', '_id']));
   }
 
-  const newNote = () => {
+  const newNote = (selectedText) => {
     const newId = new ObjectId();
-    createNote(newId, {blocks: [
-      {
-        type: 'title',
-        children: [{ text: 'new note' }],
-      }
-    ]})
-    debugger;
+    createNote(newId, createNewNoteBlocks(id, selectedText))
     return newId.toString();
   }
 
   const GetNote = async (linkedNoteId) => {
-    // let { note, loading } = getNotes(currentUser, linkedNoteId);
+    // save current note before loading a new one
+    saveNote();
     setLoadId(linkedNoteId);
-    // handleChange(note.blocks);
+    //set users new last active note id
+    updateUser({ lastActiveNoteId: linkedNoteId });
   };
 
   if (loading || !note) {
@@ -73,16 +68,13 @@ export default function HunchApp() {
       setIsCreating(true);
       (async () => {
         const newId = new ObjectId();
-        console.log('create note');
-        await createNote(newId, {blocks: initialValue});
+        await createNote(newId, createInitialNoteBlocks());
       })();
 
     }
     return 'loading...';
   }
   if (!loading && (!value || note._id !== id)) {
-
-    console.log('note', note)
     setIdValue(note._id);
     handleChange(note.blocks);
   }
@@ -94,14 +86,3 @@ export default function HunchApp() {
     </Container>
   );
 }
-
-const initialValue = [
-  {
-    type: 'title',
-    children: [{ text: 'Thoughts...' }],
-  },
-  {
-    type: 'paragraph',
-    children: [{ text: 'go here' }],
-  }
-]
