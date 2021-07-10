@@ -2,6 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import star from '../images/star.svg';
 import question from '../images/question.svg';
+import property from '../images/property.svg';
 import { Colours } from '../globalstyles/Colours';
 // import { CheckNoteBlocksUL } from './Store'
 
@@ -163,6 +164,39 @@ padding-left: 2px;
 `
 
 const StyledQuestionBlock = styled.span`
+font-family: 'Rubik', 'sans serif';
+font-size: 1rem;
+color: ${Colours.font.light};
+padding-bottom: 7px;
+`
+
+// Property Block
+export const PropertyBlock = ({ attributes, children }) => {
+  return (
+    <div>
+      <StyledPropertyBlock {...attributes}>
+        <StyledPropertyBlockContainer contentEditable={false}>
+          <StyledPropertyImg
+            src={property}
+          />
+        </StyledPropertyBlockContainer>
+        {children}
+      </StyledPropertyBlock>
+    </div>
+  )
+}
+
+const StyledPropertyBlockContainer = styled.div`
+display: inline-block;
+`
+
+const StyledPropertyImg = styled.img`
+width: 8px;
+padding-right: 8px;
+padding-left: 2px;
+`
+
+const StyledPropertyBlock = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
 color: ${Colours.font.light};

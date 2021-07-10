@@ -9,6 +9,7 @@ import {
   DottedListItem,
   StarElement,
   QuestionBlock,
+  PropertyBlock,
   Leaf
 } from './Elements'
 import { noteLayout } from './NoteLayout';
@@ -44,6 +45,8 @@ const HunchEditor = (props) => {
             return <StarElement {...props} />
         case 'question':
           return <QuestionBlock {...props} />
+        case 'property':
+          return <PropertyBlock {...props} />
         default:
             return <Paragraph {...props} />
       }
@@ -145,6 +148,20 @@ const HunchEditor = (props) => {
                   event.preventDefault();
                   props.saveNote();
               }
+
+              // Property
+              if (event.metaKey && event.key === '7') {
+                  event.preventDefault();
+                  const [match] = Editor.nodes(editor, {
+                    match: n => n.type === 'property',
+                  })
+                  Transforms.setNodes(
+                      editor,
+                      { type: match ? 'paragraph': 'property'},
+                      { match: n => Editor.isBlock(editor, n) }
+                  );
+              }
+
 
               // Title Block
               if (event.metaKey && event.key === ';') {
