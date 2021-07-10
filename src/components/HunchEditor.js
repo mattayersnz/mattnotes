@@ -78,7 +78,7 @@ const HunchEditor = (props) => {
                   const [match] = Editor.nodes(editor, {
                     match: n => n.type === 'link',
                   })
-                  
+
                   Transforms.setNodes(
                       editor,
                       {
@@ -114,7 +114,7 @@ const HunchEditor = (props) => {
                         return false
                       }}
                   );
-              
+
                   if (!selectedId) return;
                   props.getNote(selectedId);
               }
@@ -131,8 +131,7 @@ const HunchEditor = (props) => {
                 props.setIsListView(!props.isListView);
               }
 
-              // This part works once we remove the new paragraph on enter
-              if (props.isListView === true && event.key === 'Enter') {
+              if (props.isListView === true && event.key) {
                 event.preventDefault();
               }
 
@@ -210,7 +209,7 @@ const HunchEditor = (props) => {
               }
 
               // New Block
-              if (event.key === 'Enter' && !props.isAction) {
+              if (event.key === 'Enter' && !props.isAction && !props.isListView) {
                   const [match] = Editor.nodes(editor, {
                       match: n => n.type !== 'paragraph',
                   })
