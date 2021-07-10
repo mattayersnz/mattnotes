@@ -108,7 +108,7 @@ const View = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  opacity: 0.95;
+  opacity: 0.97;
   font-family: 'Rubik', 'sans serif';
   font-size: 3rem;
   font-weight: 600;
