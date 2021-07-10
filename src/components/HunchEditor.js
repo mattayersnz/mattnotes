@@ -119,10 +119,26 @@ const HunchEditor = (props) => {
                   props.getNote(selectedId);
               }
 
-              //Logout
+              // Logout
               if (event.metaKey && event.key === 'Escape') {
                 event.preventDefault();
                 props.logout();
+              }
+
+              // ListView
+              if (event.metaKey && event.key === 'u') {
+                event.preventDefault();
+                props.setIsListView(!props.isListView);
+              }
+
+              // This part works once we remove the new paragraph on enter
+              if (props.isListView === true && event.key === 'Enter') {
+                event.preventDefault();
+              }
+
+              if (props.isListView === true && event.key === 'Escape') {
+                event.preventDefault();
+                props.setIsListView(!props.isListView);
               }
 
               // Save Note

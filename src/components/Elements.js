@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import star from '../images/star.svg';
 import question from '../images/question.svg';
-import {Indicator} from '../globalstyles/Indicator';
+import { Colours } from '../globalstyles/Colours';
 // import { CheckNoteBlocksUL } from './Store'
 
 // Paragraph inline elements
@@ -17,9 +17,9 @@ export const Paragraph = props => {
 const StyledParagraph = styled.span`
   font-family: 'Rubik', 'sans serif';
   font-size: 1rem;
-  color: #EBEBEB;
+  color: ${Colours.font.light};
   display: block;
-  padding-bottom: 7px;
+  margin-bottom: 7px;
 `
 
 // H1 block elements
@@ -35,7 +35,7 @@ const StyledTitle = styled.span`
   font-family: 'Rubik', 'sans serif';
   font-size: 3rem;
   font-weight: 600;
-  color: #EBEBEB;
+  color: ${Colours.font.light};
   display: block;
   padding-bottom: 21px;
 `
@@ -68,7 +68,7 @@ padding-right: 7px;
 const StyledStarElement = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
-color: #EBEBEB;
+color: ${Colours.font.light};
 padding-bottom: 7px;
 `
 
@@ -86,7 +86,7 @@ export const OrderedListItem = props => {
 const StyledOrderedListItem = styled.span`
   font-family: 'Rubik', 'sans serif';
   font-size: 1rem;
-  color: #EBEBEB;
+  color: ${Colours.font.light};
   display: block;
 `
 
@@ -104,14 +104,15 @@ export const DottedListItem = props => {
 const StyledDottedListItem = styled.span`
   font-family: 'Rubik', 'sans serif';
   font-size: 1rem;
-  color: #EBEBEB;
+  color: ${Colours.font.light};
   display: block;
 `
 
 // Leaf: Link, Bold
 export const Leaf = props => {
+
     if (props.leaf.type === 'link') {
-      const linkType = Indicator[4];
+      const linkType = Colours.indicator[4];
       return (
           <PageLink {...props.attributes} indicator={linkType}>
               {props.children}
@@ -132,17 +133,8 @@ const PageLink = styled.span`
   padding: 1px 3px 1px 3px;
   font-family: 'Rubik', 'sans serif';
   font-size: 1rem;
-  color: #EBEBEB;
+  color: ${Colours.font.light};
 `
-
-// const PageLinkWithULs = styled.span`
-//   background: #FF4F47;
-//   border-radius: 3px;
-//   padding: 1px 3px 1px 3px;
-//   font-family: 'Rubik', 'sans serif';
-//   font-size: 1rem;
-//   color: #EBEBEB;
-// `
 
 // Question Block
 export const QuestionBlock = ({ attributes, children }) => {
@@ -173,6 +165,6 @@ padding-left: 2px;
 const StyledQuestionBlock = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
-color: #EBEBEB;
+color: ${Colours.font.light};
 padding-bottom: 7px;
 `

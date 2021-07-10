@@ -9,11 +9,11 @@ import omitDeep from 'omit-deep';
 import { Action } from './components/Action';
 import { ObjectId } from "bson";
 import { createNewNoteBlocks, createInitialNoteBlocks } from './scripts/noteHelpers';
-
+import ListView from './components/ListView';
 import {listenerEnter} from './scripts/keyboardHelpers';
 
 const Container = styled.div`
-  margin: 20%;
+  margin: 25%;
   margin-top: 10%;
 `;
 
@@ -41,6 +41,9 @@ export default function HunchApp() {
     setIsAction(true);
     listenerEnter(isAction, app.logOut())
   }
+
+  //List View
+  const [isListView, setIsListView] = useState(false)
 
   const saveNote = () => {
     const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
@@ -81,8 +84,19 @@ export default function HunchApp() {
 
   return (
     <Container>
-      <HunchEditor value={value} handleChange={handleChange} saveNote={saveNote} newNote={newNote} getNote={GetNote} logout={logoutStart} isAction={isAction} />
+      <HunchEditor
+        value={value}
+        handleChange={handleChange}
+        saveNote={saveNote}
+        newNote={newNote} 
+        getNote={GetNote}
+        logout={logoutStart}
+        isAction={isAction}
+        isListView={isListView}
+        setIsListView={setIsListView}
+      />
       { isAction && <Action actionText={"Logout?"} /> }
+      { isListView && <ListView /> }
     </Container>
   );
 }
