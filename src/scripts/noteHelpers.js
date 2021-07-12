@@ -13,7 +13,7 @@ export const createNewNoteBlocks = (backLinkNoteId, linkText) => {
         "type": "paragraph",
         "children": [
           {
-            "text": 'note maker',
+            "text": 'Hunch Note',
             "type": 'link',
             "linkNoteId": backLinkNoteId
           }

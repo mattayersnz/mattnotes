@@ -15,7 +15,7 @@ import Loading from './components/Loading';
 
 const Container = styled.div`
   margin: 25%;
-  margin-top: 10%;
+  margin-top: 12%;
 `;
 
 export default function HunchApp({ isLoading }) {
@@ -83,7 +83,7 @@ export default function HunchApp({ isLoading }) {
     }
     return <Loading stage={2} />;
   }
-  
+
   if (!loading && (!value || note._id !== id)) {
     setIdValue(note._id);
     handleChange(note.blocks);
@@ -95,7 +95,7 @@ export default function HunchApp({ isLoading }) {
         value={value}
         handleChange={handleChange}
         saveNote={saveNote}
-        newNote={newNote} 
+        newNote={newNote}
         getNote={GetNote}
         logout={logoutStart}
         isAction={isAction}
