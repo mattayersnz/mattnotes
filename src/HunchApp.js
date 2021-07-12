@@ -11,13 +11,15 @@ import { ObjectId } from "bson";
 import { createNewNoteBlocks, createInitialNoteBlocks } from './scripts/noteHelpers';
 import ListView from './components/ListView';
 import {listenerEnter} from './scripts/keyboardHelpers';
+import Loading from './components/Loading';
 
 const Container = styled.div`
   margin: 25%;
   margin-top: 10%;
 `;
 
-export default function HunchApp() {
+export default function HunchApp({ isLoading }) {
+  console.log('isLoading', isLoading)
   const app = useRealmApp();
   const currentLoggedInUser = app.currentUser;
   const currentUser = { id: currentLoggedInUser._id };
@@ -39,7 +41,11 @@ export default function HunchApp() {
   //logout actions
   const logoutStart = () => {
     setIsAction(true);
-    listenerEnter(isAction, app.logOut())
+    listenerEnter(true, app.logOut, logoutEnd);
+  }
+
+  const logoutEnd = () => {
+    setIsAction(false);
   }
 
   //List View
@@ -75,8 +81,9 @@ export default function HunchApp() {
       })();
 
     }
-    return 'loading...';
+    return <Loading stage={2} />;
   }
+  
   if (!loading && (!value || note._id !== id)) {
     setIdValue(note._id);
     handleChange(note.blocks);

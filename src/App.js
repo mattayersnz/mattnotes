@@ -9,14 +9,14 @@ export const APP_ID = "hunchapp-dwikj";
 const RequireLoggedInUser = ({ children }) => {
   // Only render children if there is a logged in user.
   const app = useRealmApp();
-  
   return app.currentUser ? children : <LoginScreen />;
 };
 
 export default function App() {
+
   return (
     <RealmAppProvider appId={APP_ID}>
-      <RequireLoggedInUser>
+      <RequireLoggedInUser >
         <RealmApolloProvider>
           <HunchApp />
         </RealmApolloProvider>
