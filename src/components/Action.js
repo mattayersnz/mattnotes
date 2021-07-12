@@ -4,17 +4,23 @@ import enter from '../images/enter.svg';
 
 // Pass in Action Type
 
-export const Action = ({ actionText }) => {
+// {((actionText === 'Login') || (actionText === 'Reset Password?')) && <Email placeholder="Email"/>}
+// {(actionText === 'Login') && <Password placeholder="Password"/>}
+
+export const Action = ({ actionType, actionText, children, hideEscape, onEnterClick }) => {
     return (
         <div>
             <ActionBox>
-                <Esc>Esc</Esc>
+                {!hideEscape && <Esc>Esc</Esc>}
                 <ActionContent>
                     <Text>{actionText}</Text>
                 </ActionContent>
-                  {((actionText === 'Login') || (actionText === 'Reset Password?')) && <Email placeholder="Email"/>}
-                  {(actionText === 'Login') && <Password placeholder="Password"/>}
-                <Enter src={enter} />
+                {actionType === 'login' &&
+                    <ActionContent>
+                        {children}
+                    </ActionContent>
+                }
+                <Enter onClick={onEnterClick} src={enter} />
             </ActionBox>
         </div>
     )
@@ -39,37 +45,13 @@ display: flex;
 flex-direction: row;
 align-self: flex-start;
 justify-content: space-between;
+width: 100%;
 `
 
 const Text = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1.7rem;
 color: #EBEBEB;
-`
-
-const Email = styled.input`
-width:90%;
-font-size: 1rem;
-background: #313131;
-margin-left: 14px;
-margin-top: 24px;
-margin-bottom: 14px;
-padding-bottom: 14px;
-border: none;
-border-bottom: 1px solid #909090;
-align-self: flex-start;
-outline: none;
-`
-
-const Password = styled.input`
-width: 90%;
-font-size: 1rem;
-background: #313131;
-margin-left: 14px;
-margin-bottom: 24px;
-border: none;
-border-bottom: 1px solid #909090;
-align-self: flex-start;
 `
 
 const Enter = styled.img`

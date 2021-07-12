@@ -1,7 +1,26 @@
 import React from "react";
-import { uiColors } from "@leafygreen-ui/palette";
-import GridLoader from "react-spinners/GridLoader";
+import styled from "styled-components";
+import { Colours } from "../globalstyles/Colours";
 
-export default function Loading() {
-  return <GridLoader size="15px" margin="3px" color={uiColors.gray.dark2} />;
+export default function Loading({ stage }) {
+
+  return (
+    <Container>
+      <LoadingText>{stage === 1 ? '.' : '...' }</LoadingText>
+    </Container>
+  )
 }
+
+const Container = styled.div`
+  height: 100vh;
+  background: ${Colours.background}
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+const LoadingText = styled.div`
+  color: ${Colours.font.light};
+  font-size: 50px;
+`;
