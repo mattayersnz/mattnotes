@@ -4,7 +4,7 @@ import star from '../images/star.svg';
 import question from '../images/question.svg';
 import property from '../images/property.svg';
 import { Colours } from '../globalstyles/Colours';
-// import { CheckNoteBlocksUL } from './Store'
+
 
 // Paragraph inline elements
 export const Paragraph = props => {
@@ -109,34 +109,6 @@ const StyledDottedListItem = styled.span`
   display: block;
 `
 
-// Leaf: Link, Bold
-export const Leaf = props => {
-
-    if (props.leaf.type === 'link') {
-      const linkType = Colours.indicator[0];
-      return (
-          <PageLink {...props.attributes} indicator={linkType}>
-              {props.children}
-          </PageLink>
-      )
-    }
-    return (
-      <span {...props.attributes} style={{fontWeight: props.leaf.bold ? 'bold' : ''}}>
-          {props.children}
-      </span>
-    );
-};
-
-// Page links with indicators
-const PageLink = styled.span`
-  background: ${(props) => props.indicator};
-  border-radius: 3px;
-  padding: 1px 3px 1px 3px;
-  font-family: 'Rubik', 'sans serif';
-  font-size: 1rem;
-  color: ${Colours.font.light};
-`
-
 // Question Block
 export const QuestionBlock = ({ attributes, children }) => {
   return (
@@ -155,6 +127,7 @@ export const QuestionBlock = ({ attributes, children }) => {
 
 const StyledQuestionBlockContainer = styled.div`
 display: inline-block;
+padding-bottom: 7px;
 `
 
 const StyledQuestionImg = styled.img`
@@ -167,7 +140,6 @@ const StyledQuestionBlock = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
 color: ${Colours.font.light};
-padding-bottom: 7px;
 `
 
 // Property Block
@@ -201,4 +173,60 @@ const StyledPropertyBlock = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
 color: ${Colours.font.light};
+`
+
+// Leaf: Link, Bold
+export const Leaf = props => {
+
+    if (props.leaf.type === 'link') {
+
+      // indicator colour
+      const linkType = Colours.indicator[1];
+
+      return (
+          <PageLink {...props.attributes} indicator={linkType}>
+              {props.children}
+          </PageLink>
+      )
+    }
+
+    if (props.leaf.underline) {
+      return (
+        <span {...props.attributes} style={{textDecoration: props.leaf.underline ? 'underline' : ''}}>
+            {props.children}
+        </span>
+      );
+    }
+
+    if (props.leaf.italic) {
+      return (
+        <span {...props.attributes} style={{fontStyle: props.leaf.italic ? 'italic' : ''}}>
+            {props.children}
+        </span>
+      );
+    }
+
+    if (props.leaf.bold) {
+      return (
+        <span {...props.attributes} style={{fontWeight: props.leaf.bold ? 'bold' : ''}}>
+            {props.children}
+        </span>
+      );
+    }
+
+    return (
+      <span {...props.attributes}>
+          {props.children}
+      </span>
+    );
+};
+
+// Page links with indicators
+const PageLink = styled.span`
+  background: ${(props) => props.indicator};
+  border-radius: 3px;
+  padding: 1px 3px 1px 3px;
+  font-family: 'Rubik', 'sans serif';
+  font-size: 1rem;
+  color: ${Colours.font.light};
 `

@@ -129,7 +129,7 @@ const HunchEditor = (props) => {
               }
 
               // ListView
-              if (event.metaKey && event.key === 'u') {
+              if (event.metaKey && event.key === 'j') {
                 event.preventDefault();
                 props.setIsListView(!props.isListView);
               }
@@ -241,6 +241,19 @@ const HunchEditor = (props) => {
                   }
               }
 
+              // Indicator Styling
+              if (event.metaKey && event.key === 'k') {
+                  event.preventDefault();
+                  const [match] = Editor.nodes(editor, {
+                    match: n => n.link === true,
+                  })
+                  Transforms.setNodes(
+                      editor,
+                      { link: match ? false : true },
+                      { match: n => Text.isText(n), split: match ? false : true}
+                  );
+              }
+
               // Bold Styling
               if (event.metaKey && event.key === 'b') {
                   event.preventDefault();
@@ -254,18 +267,33 @@ const HunchEditor = (props) => {
                   );
               }
 
-              // Indicator Styling
-              if (event.metaKey && event.key === 'k') {
-                event.preventDefault();
-                const [match] = Editor.nodes(editor, {
-                  match: n => n.link === true,
-                })
-                Transforms.setNodes(
-                    editor,
-                    { link: match ? false : true },
-                    { match: n => Text.isText(n), split: match ? false : true}
-                );
-            }
+              // Underline Styling
+              if (event.metaKey && event.key === 'u') {
+                  event.preventDefault();
+                  const [match] = Editor.nodes(editor, {
+                    match: n => n.underline === true,
+                  })
+                  Transforms.setNodes(
+                      editor,
+                      { underline: match ? false : true },
+                      { match: n => Text.isText(n), split: match ? false : true}
+                  );
+              }
+
+              // Italic Styling
+              if (event.metaKey && event.key === 'i') {
+                  event.preventDefault();
+                  const [match] = Editor.nodes(editor, {
+                    match: n => n.italic === true,
+                  })
+                  Transforms.setNodes(
+                      editor,
+                      { italic: match ? false : true },
+                      { match: n => Text.isText(n), split: match ? false : true}
+                  );
+              }
+
+
             }}
           />
       </Slate>
