@@ -23,7 +23,7 @@ const StyledParagraph = styled.span`
   margin-bottom: 7px;
 `
 
-// H1 block elements
+// Title block elements
 export const TitleElement = props => {
   return (
     <StyledTitle {...props.attributes}>
@@ -38,7 +38,7 @@ const StyledTitle = styled.span`
   font-weight: 600;
   color: ${Colours.font.light};
   display: block;
-  padding-bottom: 21px;
+  padding-bottom: 32px;
 `
 
 // Star elements
@@ -113,7 +113,7 @@ const StyledDottedListItem = styled.span`
 export const Leaf = props => {
 
     if (props.leaf.type === 'link') {
-      const linkType = Colours.indicator[4];
+      const linkType = Colours.indicator[0];
       return (
           <PageLink {...props.attributes} indicator={linkType}>
               {props.children}
@@ -188,6 +188,7 @@ export const PropertyBlock = ({ attributes, children }) => {
 
 const StyledPropertyBlockContainer = styled.div`
 display: inline-block;
+padding-bottom: 7px;
 `
 
 const StyledPropertyImg = styled.img`
@@ -200,5 +201,4 @@ const StyledPropertyBlock = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
 color: ${Colours.font.light};
-padding-bottom: 7px;
 `

@@ -72,7 +72,7 @@ const HunchEditor = (props) => {
             renderLeaf={renderLeaf}
             onKeyDown={event => {
 
-              // Create Link -- NOT COMPLETE
+              // Create Link
               if (event.metaKey && event.key === '[') {
                   event.preventDefault();
                   const [node] = Editor.node(editor, editor.selection);
@@ -105,7 +105,7 @@ const HunchEditor = (props) => {
 
               }
 
-              // Navigate to Link -- NOT COMPLETE
+              // Navigate to Link
               if (event.metaKey && event.key === 'y') {
                   event.preventDefault();
                   let selectedId = '';
