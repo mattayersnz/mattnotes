@@ -127,7 +127,7 @@ export const QuestionBlock = ({ attributes, children }) => {
 
 const StyledQuestionBlockContainer = styled.div`
 display: inline-block;
-padding-bottom: 7px;
+margin-bottom: 7px;
 `
 
 const StyledQuestionImg = styled.img`
@@ -160,7 +160,7 @@ export const PropertyBlock = ({ attributes, children }) => {
 
 const StyledPropertyBlockContainer = styled.div`
 display: inline-block;
-padding-bottom: 7px;
+margin-bottom: 7px;
 `
 
 const StyledPropertyImg = styled.img`

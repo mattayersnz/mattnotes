@@ -69,6 +69,8 @@ export default function HunchApp({ isLoading }) {
     setLoadId(linkedNoteId);
     //set users new last active note id
     updateUser({ lastActiveNoteId: linkedNoteId });
+    window.scrollTo(0, 0);
+
   };
 
   if (loading || !note) {
@@ -103,7 +105,7 @@ export default function HunchApp({ isLoading }) {
         setIsListView={setIsListView}
       />
       { isAction && <Action actionText={"Logout?"} /> }
-      { isListView && <ListView /> }
+      { isListView && <ListView value={value} /> }
     </Container>
   );
 }

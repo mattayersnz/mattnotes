@@ -30,26 +30,29 @@ const useKeyPress = function(targetKey) {
   return keyPressed;
 };
 
-const items = [
-  { id: 1, title: "Founder Chats" },
-  { id: 2, title: "Hunch Strategy" },
-  { id: 3, title: "Note Apps" },
-  { id: 4, title: "Notion" },
-  { id: 5, title: "Obsidian" }
-];
+// const items = [
+//   { id: 1, title: "Founder Chats" },
+//   { id: 2, title: "Hunch Strategy" },
+//   { id: 3, title: "Note Apps" },
+//   { id: 4, title: "Notion" },
+//   { id: 5, title: "Obsidian" }
+// ];
 
-const ListItem = ({ item, active, setSelected, setHovered }) => (
-  <div
-    className={`item ${active ? "active" : ""}`}
-    onClick={() => setSelected(item)}
-    onMouseEnter={() => setHovered(item)}
-    onMouseLeave={() => setHovered(undefined)}
-  >
-    {item.title}
-  </div>
-);
+const ListItem = ({ item, active, setSelected, setHovered }) => {
 
-const ListView = () => {
+  return (
+    <div
+      className={`item ${active ? "active" : ""}`}
+      onClick={() => setSelected(item)}
+      onMouseEnter={() => setHovered(item)}
+      onMouseLeave={() => setHovered(undefined)}
+    >
+      {item}
+    </div>
+  )
+};
+
+const ListView = (props) => {
   const [selected, setSelected] = useState(undefined);
   const downPress = useKeyPress("ArrowDown");
   const upPress = useKeyPress("ArrowUp");
@@ -57,38 +60,48 @@ const ListView = () => {
   const [cursor, setCursor] = useState(0);
   const [hovered, setHovered] = useState(undefined);
 
+  // Get notes
+  const notes = props.value
+  const noteTitles = notes.filter(getTitles)
+  function getTitles(notes) {
+    return notes.type === 'title';
+  }
+  console.log(noteTitles)
+
   useEffect(() => {
-    if (items.length && downPress) {
+    if (noteTitles.length && downPress) {
       setCursor(prevState =>
-        prevState < items.length - 1 ? prevState + 1 : prevState
+        prevState < noteTitles.length - 1 ? prevState + 1 : prevState
       );
     }
-  }, [downPress]);
+  }, [downPress, noteTitles]);
   useEffect(() => {
-    if (items.length && upPress) {
+    if (noteTitles.length && upPress) {
       setCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
     }
-  }, [upPress]);
+  }, [upPress, noteTitles]);
   useEffect(() => {
-    if (items.length && enterPress) {
-      setSelected(items[cursor]);
+    if (noteTitles.length && enterPress) {
+      setSelected(noteTitles[cursor]);
     }
-  }, [cursor, enterPress]);
+  }, [cursor, enterPress, noteTitles]);
   useEffect(() => {
-    if (items.length && hovered) {
-      setCursor(items.indexOf(hovered));
+    if (noteTitles.length && hovered) {
+      setCursor(noteTitles.indexOf(hovered));
     }
-  }, [hovered]);
+  }, [hovered, noteTitles]);
+
+  console.log("Selected", selected)
 
   return (
     <View>
       <Esc> Esc </Esc>
-      <span>Selected: {selected ? selected.title : "none"}</span>
-      {items.map((item, i) => (
+      <span>Selected: {selected ? selected.children[0].text : "none"}</span>
+      {noteTitles.map((title, i) => (
         <ListItem
-          key={item.id}
+          key={noteTitles.indexOf(title)}
           active={i === cursor}
-          item={item}
+          item={title.children[0].text}
           setSelected={setSelected}
           setHovered={setHovered}
         />
@@ -98,7 +111,7 @@ const ListView = () => {
 };
 
 const View = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   background: #313131;
