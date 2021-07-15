@@ -227,31 +227,21 @@ const HunchEditor = (props) => {
 
               // New Block
               if (event.key === 'Enter' && !props.isAction && !props.isListView) {
+
                   const [match] = Editor.nodes(editor, {
                       match: n => n.type !== 'paragraph',
                   })
                   if (match) {
                     event.preventDefault()
-
-                    Transforms.insertNodes(editor, [{
-                      "type": "paragraph",
-                      "children": [{"text": ""}]
-                    }]
-                    )
+                    Editor.insertBreak(editor)
+                    Transforms.setNodes(
+                        editor,
+                        { type: 'paragraph'},
+                        { match: n => Editor.isBlock(editor, n) }
+                    );
                   }
-              }
 
-              // Indicator Styling
-              if (event.metaKey && event.key === 'k') {
-                  event.preventDefault();
-                  const [match] = Editor.nodes(editor, {
-                    match: n => n.link === true,
-                  })
-                  Transforms.setNodes(
-                      editor,
-                      { link: match ? false : true },
-                      { match: n => Text.isText(n), split: match ? false : true}
-                  );
+
               }
 
               // Bold Styling

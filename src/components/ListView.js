@@ -30,16 +30,18 @@ const useKeyPress = function(targetKey) {
   return keyPressed;
 };
 
-const ListItem = ({ item, active, setSelected, setHovered }) => (
-  <div
-    className={`item ${active ? "active" : ""}`}
-    onClick={() => setSelected(item)}
-    onMouseEnter={() => setHovered(item)}
-    onMouseLeave={() => setHovered(undefined)}
-  >
-    {item.title}
-  </div>
-);
+const ListItem = ({ item, active, setSelected, setHovered }) => {
+  return (
+    <div
+      className={`item ${active ? "active" : ""}`}
+      onClick={() => setSelected(item)}
+      onMouseEnter={() => setHovered(item)}
+      onMouseLeave={() => setHovered(undefined)}
+    >
+      {item}
+    </div>
+  )
+};
 
 const ListView = ({ list, getNote, setIsListView }) => {
   const items = list.filter(function (item) {
@@ -58,24 +60,25 @@ const ListView = ({ list, getNote, setIsListView }) => {
         prevState < items.length - 1 ? prevState + 1 : prevState
       );
     }
-  }, [downPress]);
+  }, [downPress, items]);
   useEffect(() => {
     if (items.length && upPress) {
       setCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
     }
-  }, [upPress]);
+  }, [upPress, items]);
   useEffect(() => {
     if (items.length && enterPress) {
       setSelected(items[cursor]);
       items[cursor] && getNote(items[cursor]._id);
       setIsListView(false)
     }
-  }, [cursor, enterPress]);
+  }, [cursor, enterPress, items, getNote, setIsListView]);
   useEffect(() => {
     if (items.length && hovered) {
       setCursor(items.indexOf(hovered));
     }
-  }, [hovered]);
+  }, [hovered, items]);
+
 
   return (
     <View>
@@ -85,7 +88,7 @@ const ListView = ({ list, getNote, setIsListView }) => {
         <ListItem
           key={item._id}
           active={i === cursor}
-          item={item}
+          item={item.title}
           setSelected={setSelected}
           setHovered={setHovered}
         />
@@ -95,7 +98,7 @@ const ListView = ({ list, getNote, setIsListView }) => {
 };
 
 const View = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   background: #313131;

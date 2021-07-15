@@ -71,6 +71,8 @@ export default function HunchApp() {
     setLoadId(linkedNoteId);
     //set users new last active note id
     updateUser({ lastActiveNoteId: linkedNoteId });
+    window.scrollTo(0, 0);
+
   };
 
   if (loading || !note) {
