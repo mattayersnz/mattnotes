@@ -30,14 +30,6 @@ const useKeyPress = function(targetKey) {
   return keyPressed;
 };
 
-const items = [
-  { id: 1, title: "Founder Chats" },
-  { id: 2, title: "Hunch Strategy" },
-  { id: 3, title: "Note Apps" },
-  { id: 4, title: "Notion" },
-  { id: 5, title: "Obsidian" }
-];
-
 const ListItem = ({ item, active, setSelected, setHovered }) => (
   <div
     className={`item ${active ? "active" : ""}`}
@@ -49,7 +41,10 @@ const ListItem = ({ item, active, setSelected, setHovered }) => (
   </div>
 );
 
-const ListView = () => {
+const ListView = ({ list, getNote, setIsListView }) => {
+  const items = list.filter(function (item) {
+    return item.title;
+  });
   const [selected, setSelected] = useState(undefined);
   const downPress = useKeyPress("ArrowDown");
   const upPress = useKeyPress("ArrowUp");
@@ -72,6 +67,8 @@ const ListView = () => {
   useEffect(() => {
     if (items.length && enterPress) {
       setSelected(items[cursor]);
+      items[cursor] && getNote(items[cursor]._id);
+      setIsListView(false)
     }
   }, [cursor, enterPress]);
   useEffect(() => {
@@ -86,7 +83,7 @@ const ListView = () => {
       <span>Selected: {selected ? selected.title : "none"}</span>
       {items.map((item, i) => (
         <ListItem
-          key={item.id}
+          key={item._id}
           active={i === cursor}
           item={item}
           setSelected={setSelected}

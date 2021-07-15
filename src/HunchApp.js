@@ -4,11 +4,14 @@ import HunchEditor from './components/HunchEditor';
 import { useRealmApp } from "./RealmApp";
 import useNotes from "./graphql/useNotes";
 import useUsers from "./graphql/useUsers";
-import cloneDeep from 'clone-deep';
-import omitDeep from 'omit-deep';
+import useAllNotes from './graphql/useNotesAll';
 import { Action } from './components/Action';
 import { ObjectId } from "bson";
-import { createNewNoteBlocks, createInitialNoteBlocks } from './scripts/noteHelpers';
+import { 
+  convertNoteToSaveFormat, 
+  createNewNoteBlocks, 
+  createInitialNoteBlocks 
+} from './scripts/noteHelpers';
 import ListView from './components/ListView';
 import {listenerEnter} from './scripts/keyboardHelpers';
 import Loading from './components/Loading';
@@ -18,8 +21,7 @@ const Container = styled.div`
   margin-top: 12%;
 `;
 
-export default function HunchApp({ isLoading }) {
-  console.log('isLoading', isLoading)
+export default function HunchApp() {
   const app = useRealmApp();
   const currentLoggedInUser = app.currentUser;
   const currentUser = { id: currentLoggedInUser._id };
@@ -33,6 +35,8 @@ export default function HunchApp({ isLoading }) {
   const [isCreating, setIsCreating] = useState(false);
   const [value, setValue] = useState();
   const [isAction, setIsAction] = useState(false);
+
+  const { notes } = useAllNotes(currentUser);
 
   const handleChange = (updatedValue) => {
     setValue(updatedValue)
@@ -52,9 +56,7 @@ export default function HunchApp({ isLoading }) {
   const [isListView, setIsListView] = useState(false)
 
   const saveNote = () => {
-    const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
-    graph.blocks = value;
-    updateNote(id, omitDeep(cloneDeep(graph), ['__typename', '_id']));
+    updateNote(id, convertNoteToSaveFormat(note, value));
   }
 
   const newNote = (selectedText) => {
@@ -103,7 +105,7 @@ export default function HunchApp({ isLoading }) {
         setIsListView={setIsListView}
       />
       { isAction && <Action actionText={"Logout?"} /> }
-      { isListView && <ListView /> }
+      { isListView && <ListView list={notes} getNote={GetNote} setIsListView={setIsListView}/> }
     </Container>
   );
 }
