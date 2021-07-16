@@ -68,22 +68,22 @@ const ListView = ({ list, getNote, setIsListView }) => {
         prevState < items.length - 1 ? prevState + 1 : prevState
       );
     }
-  }, [downPress]);
+  }, [downPress, items.length]);
   useEffect(() => {
     if (items.length && upPress) {
       setCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
     }
-  }, [upPress]);
+  }, [upPress, items.length]);
   useEffect(() => {
     if (items.length && enterPress) {
       goToNewNote(items[cursor])
     }
-  }, [cursor, enterPress, goToNewNote]);
+  }, [cursor, enterPress, goToNewNote, items]);
   useEffect(() => {
     if (items.length && hovered) {
       setCursor(items.indexOf(hovered));
     }
-  }, [hovered]);
+  }, [hovered, items]);
 
   return (
     <View>
