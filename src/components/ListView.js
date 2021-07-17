@@ -38,15 +38,18 @@ const ListItem = ({ item, active, setSelected, setHovered }) => {
       onMouseEnter={() => setHovered(item)}
       onMouseLeave={() => setHovered(undefined)}
     >
-      {item}
+      {item.title}
     </div>
   )
 };
 
 const ListView = ({ list, getNote, setIsListView }) => {
+
+  // taking an object of notes with blocks and making it into title blocks as items
   const items = list.filter(function (item) {
-    return item.title;
+    return item
   });
+
   const [selected, setSelected] = useState(undefined);
   const downPress = useKeyPress("ArrowDown");
   const upPress = useKeyPress("ArrowUp");
@@ -60,35 +63,32 @@ const ListView = ({ list, getNote, setIsListView }) => {
         prevState < items.length - 1 ? prevState + 1 : prevState
       );
     }
-  }, [downPress, items]);
+  }, [downPress, items.length]);
   useEffect(() => {
     if (items.length && upPress) {
       setCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
     }
-  }, [upPress, items]);
+  }, [upPress, items.length]);
   useEffect(() => {
     if (items.length && enterPress) {
-      setSelected(items[cursor]);
       items[cursor] && getNote(items[cursor]._id);
       setIsListView(false)
     }
-  }, [cursor, enterPress, items, getNote, setIsListView]);
+  }, [cursor, enterPress, items, getNote, setIsListView, selected]);
   useEffect(() => {
     if (items.length && hovered) {
       setCursor(items.indexOf(hovered));
     }
   }, [hovered, items]);
 
-
   return (
     <View>
-      <Esc> Esc </Esc>
-      <span>Selected: {selected ? selected.title : "none"}</span>
+      <Esc onClick={() => setIsListView(false)}> Esc </Esc>
       {items.map((item, i) => (
         <ListItem
           key={item._id}
           active={i === cursor}
-          item={item.title}
+          item={item}
           setSelected={setSelected}
           setHovered={setHovered}
         />
@@ -112,15 +112,14 @@ const View = styled.div`
   font-family: 'Rubik', 'sans serif';
   font-size: 3rem;
   font-weight: 600;
-  color: ${Colours.font.dark};;
-  .item.active,
+  color: ${Colours.font.dark};
+  .item.active {
+    color: ${Colours.font.light}
+  }
   .item:hover {
     color: ${Colours.font.light};
-}
-
-.item:hover {
-  cursor: pointer;
-}
+    cursor: pointer;
+  }
 `
 
 const Esc = styled.span`
@@ -130,6 +129,9 @@ color: ${Colours.font.light};
 margin: 24px;
 text-align: right;
 align-self: flex-end;
+:hover {
+  cursor: pointer;
+}
 `
 
 export default ListView

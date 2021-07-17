@@ -21,6 +21,7 @@ const StyledParagraph = styled.span`
   color: ${Colours.font.light};
   display: block;
   margin-bottom: 7px;
+  line-height: 1.5;
 `
 
 // Title block elements
