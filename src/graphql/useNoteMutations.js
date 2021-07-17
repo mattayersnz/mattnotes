@@ -37,33 +37,43 @@ const DeleteNoteMutation = gql`
   }
 `;
 
-// const NoteFieldsFragment = gql`
-//   fragment NoteFields on Note {
-//     _id
-//     _partition
-//     status
-//     name
-//   }
-// `;
+const NoteFieldsFragment = gql`
+  fragment NoteFields on Note {
+    _id
+    _partition
+    title
+    blocks {
+      children {
+        type
+        text
+        linkNoteId
+        bold
+        underline
+        italic
+        strikethrough
+      }
+    }
+  }
+`;
 
 function useCreateNote(project) {
-  const [createNoteMutation] = useMutation(CreateNoteMutation); //, {
+  const [createNoteMutation] = useMutation(CreateNoteMutation, {
     // Manually save added Notes into the Apollo cache so that Note queries automatically update
     // For details, refer to https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-  //   update: (cache, { data: { createdNote } }) => {
-  //     cache.modify({
-  //       fields: {
-  //         notes: (existingNotes = []) => [
-  //           ...existingNotes,
-  //           cache.writeFragment({
-  //             data: createdNote,
-  //             fragment: NoteFieldsFragment,
-  //           }),
-  //         ],
-  //       },
-  //     });
-  //   },
-  // });
+    update: (cache, { data: { createdNote } }) => {
+      cache.modify({
+        fields: {
+          notes: (existingNotes = []) => [
+            ...existingNotes,
+            cache.writeFragment({
+              data: createdNote,
+              fragment: NoteFieldsFragment,
+            }),
+          ],
+        },
+      });
+    },
+  });
 
   const createNote = async (newId, note) => {
     const { createdNote } = await createNoteMutation({
@@ -82,7 +92,25 @@ function useCreateNote(project) {
 }
 
 function useUpdateNote(project) {
-  const [updateNoteMutation] = useMutation(UpdateNoteMutation);
+  const [updateNoteMutation] = useMutation(UpdateNoteMutation, {
+    // Manually save added Notes into the Apollo cache so that Note queries automatically update
+    // For details, refer to https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    update: (cache, { data: { updatedNote } }) => {
+      debugger;
+      cache.modify({
+        fields: {
+          notes: (existingNotes = []) => { 
+            //removes the note from cache when saving to override what there
+            const filteredNotes = existingNotes.filter((value) => value && value._ref !== updatedNote._partition );
+            return [
+              ...filteredNotes
+            ]
+          },
+        },
+      });
+    },
+  });
+
   const updateNote = async (noteId, updates) => {
     const { updatedNote } = await updateNoteMutation({
       variables: { noteId: noteId, updates },
