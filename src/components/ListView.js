@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { Colours } from '../globalstyles/Colours';
 
@@ -30,18 +30,16 @@ const useKeyPress = function(targetKey) {
   return keyPressed;
 };
 
-const ListItem = ({ item, active, setSelected, setHovered }) => {
-  return (
-    <div
-      className={`item ${active ? "active" : ""}`}
-      onClick={() => setSelected(item)}
-      onMouseEnter={() => setHovered(item)}
-      onMouseLeave={() => setHovered(undefined)}
-    >
-      {item.title}
-    </div>
-  )
-};
+const ListItem = ({ item, active, goToNewNote, setHovered }) => (
+  <div
+    className={`item ${active ? "active" : ""}`}
+    onClick={() => goToNewNote(item)}
+    onMouseEnter={() => setHovered(item)}
+    onMouseLeave={() => setHovered(undefined)}
+  >
+    {item.title}
+  </div>
+);
 
 const ListView = ({ list, getNote, setIsListView }) => {
 
@@ -50,12 +48,20 @@ const ListView = ({ list, getNote, setIsListView }) => {
     return item
   });
 
-  const [selected, setSelected] = useState(undefined);
   const downPress = useKeyPress("ArrowDown");
   const upPress = useKeyPress("ArrowUp");
   const enterPress = useKeyPress("Enter");
   const [cursor, setCursor] = useState(0);
   const [hovered, setHovered] = useState(undefined);
+
+
+  const goToNewNote = useCallback((item) => {
+    item && getNote(item._id);
+    setIsListView(false)
+  }, [setIsListView, getNote]);
+  // const goToNewNote = (item) => {
+    
+  // }
 
   useEffect(() => {
     if (items.length && downPress) {
@@ -71,10 +77,9 @@ const ListView = ({ list, getNote, setIsListView }) => {
   }, [upPress, items.length]);
   useEffect(() => {
     if (items.length && enterPress) {
-      items[cursor] && getNote(items[cursor]._id);
-      setIsListView(false)
+      goToNewNote(items[cursor])
     }
-  }, [cursor, enterPress, items, getNote, setIsListView, selected]);
+  }, [cursor, enterPress, goToNewNote, items]);
   useEffect(() => {
     if (items.length && hovered) {
       setCursor(items.indexOf(hovered));
@@ -89,7 +94,7 @@ const ListView = ({ list, getNote, setIsListView }) => {
           key={item._id}
           active={i === cursor}
           item={item}
-          setSelected={setSelected}
+          goToNewNote={goToNewNote}
           setHovered={setHovered}
         />
       ))}
@@ -98,7 +103,7 @@ const ListView = ({ list, getNote, setIsListView }) => {
 };
 
 const View = styled.div`
-  position: fixed;
+  position: absolute;
   top: 0px;
   left: 0px;
   background: #313131;

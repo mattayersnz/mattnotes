@@ -29,6 +29,7 @@ function useGetNote(project, noteId) {
   // If the query has finished, return the notes from the result data
   // Otherwise, return an empty list
   const note = data?.note;
+  console.log('note', note)
   return { note, loading };
 }
 
