@@ -42,10 +42,12 @@ const ListItem = ({ item, active, goToNewNote, setHovered }) => (
 );
 
 const ListView = ({ list, getNote, setIsListView }) => {
+
+  // taking an object of notes with blocks and making it into title blocks as items
   const items = list.filter(function (item) {
-    return item.title;
+    return item
   });
-  const [selected, setSelected] = useState(undefined);
+
   const downPress = useKeyPress("ArrowDown");
   const upPress = useKeyPress("ArrowUp");
   const enterPress = useKeyPress("Enter");
@@ -54,7 +56,6 @@ const ListView = ({ list, getNote, setIsListView }) => {
 
 
   const goToNewNote = useCallback((item) => {
-    setSelected(item);
     item && getNote(item._id);
     setIsListView(false)
   }, [setIsListView, getNote]);
@@ -87,8 +88,7 @@ const ListView = ({ list, getNote, setIsListView }) => {
 
   return (
     <View>
-      <Esc> Esc </Esc>
-      <span>Selected: {selected ? selected.title : "none"}</span>
+      <Esc onClick={() => setIsListView(false)}> Esc </Esc>
       {items.map((item, i) => (
         <ListItem
           key={item._id}
@@ -117,15 +117,14 @@ const View = styled.div`
   font-family: 'Rubik', 'sans serif';
   font-size: 3rem;
   font-weight: 600;
-  color: ${Colours.font.dark};;
-  .item.active,
+  color: ${Colours.font.dark};
+  .item.active {
+    color: ${Colours.font.light}
+  }
   .item:hover {
     color: ${Colours.font.light};
-}
-
-.item:hover {
-  cursor: pointer;
-}
+    cursor: pointer;
+  }
 `
 
 const Esc = styled.span`
@@ -135,6 +134,9 @@ color: ${Colours.font.light};
 margin: 24px;
 text-align: right;
 align-self: flex-end;
+:hover {
+  cursor: pointer;
+}
 `
 
 export default ListView

@@ -7,10 +7,10 @@ import useUsers from "./graphql/useUsers";
 import useAllNotes from './graphql/useNotesAll';
 import { Action } from './components/Action';
 import { ObjectId } from "bson";
-import { 
-  convertNoteToSaveFormat, 
-  createNewNoteBlocks, 
-  createInitialNoteBlocks 
+import {
+  convertNoteToSaveFormat,
+  createNewNoteBlocks,
+  createInitialNoteBlocks
 } from './scripts/noteHelpers';
 import ListView from './components/ListView';
 import {listenerEnter} from './scripts/keyboardHelpers';
