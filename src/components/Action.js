@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import enter from '../images/enter.svg';
+import { Colours } from '../globalstyles/Colours';
 
 // Pass in Action Type
 
@@ -8,39 +9,43 @@ import enter from '../images/enter.svg';
 // {(actionText === 'Login') && <Password placeholder="Password"/>}
 
 export const Action = ({ actionType, actionText, children, hideEscape, onEnterClick }) => {
-    return (
-        <div>
-            <ActionBox>
-                {!hideEscape && <Esc>Esc</Esc>}
-                <ActionContent>
-                    <Text>{actionText}</Text>
-                </ActionContent>
-                {actionType === 'login' &&
-                    <ActionContent>
-                        {children}
-                    </ActionContent>
-                }
-                <Enter onClick={onEnterClick} src={enter} />
-            </ActionBox>
-        </div>
-    )
+  return (
+      <div>
+          <ActionBox>
+          {!hideEscape && <Esc>Esc</Esc>}
+              <ActionContent>
+                  <Text>{actionText}</Text>
+              </ActionContent>
+              {actionType === 'login' &&
+                  <ActionContent>
+                      {children}
+                  </ActionContent>
+              }
+              <Enter onClick={onEnterClick} src={enter} />
+          </ActionBox>
+      </div>
+  )
 }
+
+
 const ActionBox = styled.div`
-position: absolute;
-top: 40%;
-left: 30%;
-padding: 22px;
+padding: 24px;
 background: #313131;
 border-radius: 5px;
-width: 30%;
 display: flex;
 flex-direction: column;
-justify-content: space-between;
+justify-content: center;
 align-items: center;
+align-self: center;
+width: 40vw;
+@media only screen and (max-width: 600px) {
+  width: 80vw;
+}
 `
 
 const ActionContent = styled.span`
-padding-left: 14px;
+padding-left: 12px;
+padding-top: 12px;
 display: flex;
 flex-direction: row;
 align-self: flex-start;
@@ -50,21 +55,22 @@ width: 100%;
 
 const Text = styled.span`
 font-family: 'Rubik', 'sans serif';
-font-size: 1.7rem;
-color: #EBEBEB;
+font-size: 2rem;
+font-weight: bold;
+color: ${Colours.font.light}
 `
 
 const Enter = styled.img`
 display: flex;
 flex-direction: column;
 align-self: flex-end;
-width: 24px;
+width: 32px;
 `
 
 const Esc = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: .9rem;
-color: #EBEBEB;
+color: ${Colours.font.light}
 padding-bottom: 7px;
 text-align: right;
 align-self: flex-end;
