@@ -197,7 +197,7 @@ export const Leaf = props => {
     if (props.leaf.type === 'link') {
       const questionCount = getQuestionCountFromMeta(props.leaf.linkNoteId, props.notesMeta);
       // indicator colour
-      const linkType = questionCount === null ? Colours.deleted : Colours.indicator[questionCount];
+      const linkType = props.isMetaDataLoading ? Colours.loadingLink :(questionCount === null ? Colours.deleted : Colours.indicator[questionCount]);
 
       return (
           <PageLink {...props.attributes} indicator={linkType}>

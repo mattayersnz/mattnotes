@@ -47,7 +47,7 @@ export default function HunchApp() {
   const [actionType, setActionType] = useState(false);
 
   const { notes } = useAllNotes(currentUser);
-  const { notesMeta } = useNotesLinked(currentUser, linkedNoteIds)
+  const { loadingMeta, notesMeta } = useNotesLinked(currentUser, linkedNoteIds)
   const handleChange = (updatedValue) => {
     setValue(updatedValue)
   };
@@ -131,6 +131,7 @@ export default function HunchApp() {
         isAction={isAction}
         isListView={isListView}
         setIsListView={setIsListView}
+        isMetaDataLoading={loadingMeta}
       />
       { isAction && <Action 
         actionType={actionType} 

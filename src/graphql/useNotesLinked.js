@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 const useNotesLinked = (project, noteIds) => {
     const { notes, loading } = useGetNoteMeta(project, noteIds);
     return {
-      loading,
+      loadingMeta: loading,
       notesMeta: notes
     };
   };
