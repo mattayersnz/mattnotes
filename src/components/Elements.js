@@ -60,6 +60,7 @@ export const StarElement = ({ attributes, children }) => {
 
 const StyledStarImgElementContainer = styled.div`
 display: inline-block;
+margin-bottom: 7px;
 `
 
 const StyledStarImgElement = styled.img`
@@ -71,7 +72,8 @@ const StyledStarElement = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
 color: ${Colours.font.light};
-padding-bottom: 7px;
+margin-bottom: 7px;
+line-height: 1.5;
 `
 
 // OrderedListItem block element
@@ -141,6 +143,8 @@ const StyledQuestionBlock = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
 color: ${Colours.font.light};
+margin-bottom: 7px;
+line-height: 1.5;
 `
 
 // Property Block
@@ -174,6 +178,8 @@ const StyledPropertyBlock = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: 1rem;
 color: ${Colours.font.light};
+margin-bottom: 7px;
+line-height: 1.5;
 `
 
 const getNoteMeta = (noteId, notesMeta) => {

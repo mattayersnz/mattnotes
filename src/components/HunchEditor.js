@@ -130,7 +130,7 @@ const HunchEditor = (props) => {
               }
 
               // ListView
-              if (event.metaKey && event.key === 'j') {
+              if (event.metaKey && event.key === 'k') {
                 event.preventDefault();
                 props.setIsListView(!props.isListView);
               }
@@ -223,7 +223,7 @@ const HunchEditor = (props) => {
               }
 
               // Paragraph Block
-              if (event.key === 'Escape') {
+              if (event.key === 'Escape' && !props.isAction) {
                   event.preventDefault()
                   Transforms.setNodes(
                       editor,
@@ -236,8 +236,11 @@ const HunchEditor = (props) => {
               if (event.key === 'Enter' && !props.isAction && !props.isListView) {
 
                   const [match] = Editor.nodes(editor, {
-                      match: n => n.type !== 'paragraph',
+                      match: n => n.type === 'question' || 'star' || 'property' || 'link'
                   })
+
+                  // this isn't yet picking up the leaf.type = link
+
                   if (match) {
                     event.preventDefault()
                     Editor.insertBreak(editor)
@@ -247,8 +250,6 @@ const HunchEditor = (props) => {
                         { match: n => Editor.isBlock(editor, n) }
                     );
                   }
-
-
               }
 
               // Bold Styling

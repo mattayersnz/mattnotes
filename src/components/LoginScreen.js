@@ -21,7 +21,7 @@ export default function LoginScreen() {
     const [error, setError] = React.useState({});
     // Whenever the mode changes, clear the form inputs
     React.useEffect(() => {
-        setEmail("sampleemail@example.com");
+        setEmail("email@example.com");
         setPassword("password");
         setError({});
     }, [mode]);
@@ -61,7 +61,7 @@ export default function LoginScreen() {
                 <Action
                     hideEscape={true}
                     actionType="login"
-                    actionText={mode === "login" ? "Log In" : "Register an Account"}
+                    actionText={mode === "login" ? "Login" : "Register an Account"}
                     onEnterClick={mode === "login" ? handleLogin : handleRegistrationAndLogin}
                 >
                     <LoginForm>
@@ -161,10 +161,10 @@ function parseAuthenticationError(err) {
 }
 
 const ToggleContainer = styled.div`
-  margin-top: 8px;
+  margin-top: 12px;
   font-size: 12px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 24px;
 `;
 
@@ -178,14 +178,18 @@ const ToggleLink = styled.button`
   border: none;
   font-size: 12px;
   color: ${Colours.font.dark};
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const Container = styled.div`
+  position: absolute;
   height: 100vh;
+  width: 100vw;
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
-  flex-direction: column;
 `;
 
 const LoginForm = styled.div`
@@ -196,15 +200,15 @@ width: 100%;
 
 const LoginFormRow = styled.div`
   margin-bottom: 16px;
+  width: 100%;
 `;
 
 const Email = styled.input`
 width:90%;
 font-size: 1rem;
 background: #313131;
-margin-top: 24px;
+margin-top: 48px;
 margin-bottom: 14px;
-padding-bottom: 14px;
 border: none;
 border-bottom: 1px solid #909090;
 align-self: flex-start;
@@ -220,5 +224,6 @@ margin-bottom: 0px;
 border: none;
 border-bottom: 1px solid #909090;
 align-self: flex-start;
+outline: none;
 color: ${Colours.font.light};
 `
