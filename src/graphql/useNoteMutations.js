@@ -29,10 +29,9 @@ const UpdateNoteMutation = gql`
 
 const DeleteNoteMutation = gql`
   mutation DeleteNote($noteId: ObjectId!) {
-    deletedNote: deleteOneNote(query: { _id: noteId }) {
+    deletedNote: deleteOneNote(query: { _id: $noteId }) {
       _id
       _partition
-      status
     }
   }
 `;
@@ -121,9 +120,9 @@ function useUpdateNote(project) {
 
 function useDeleteNote(project) {
   const [deleteNoteMutation] = useMutation(DeleteNoteMutation);
-  const deleteNote = async (note) => {
+  const deleteNote = async (noteId) => {
     const { deletedNote } = await deleteNoteMutation({
-      variables: { noteId: note._id },
+      variables: { noteId: noteId },
     });
     return deletedNote;
   };

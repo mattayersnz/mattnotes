@@ -13,5 +13,7 @@ export const Colours = {
       "linear-gradient(200deg, #FF4F47 21.38%, #6A27BF 66.9%)",
       "linear-gradient(200deg, #FFBF00 7.39%, #FF4F47 24.79%, #6A27BF 56.55%)",
       "linear-gradient(200deg, #FFBF00 7.39%, #FF4F47 24.79%, #6A27BF 56.55%)"
-    ]
+    ],
+  deleted: "#CCCCCC",
+  loadingLink: "#292929"
 }

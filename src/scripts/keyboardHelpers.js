@@ -5,15 +5,13 @@ export function listenerEnter(isAction, eventAction, eventCancel) {
 
 function keyDownHandler(event, eventAction, eventCancel) {
     event.preventDefault();
-    console.log(event.keyCode )
     if (event.keyCode === 13) {
-        console.log('is this the button')
+        document.removeEventListener("keydown", keyDownHandler, true);
         eventAction();
-        window.removeEventListener("keydown", keyDownHandler);
     }
     else if (event.keyCode === 27) {
+        document.removeEventListener("keydown", keyDownHandler, true);
         eventCancel();
-        window.removeEventListener("keydown", keyDownHandler);
     }
     
 };

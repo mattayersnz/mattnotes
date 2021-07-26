@@ -176,13 +176,22 @@ font-size: 1rem;
 color: ${Colours.font.light};
 `
 
+const getNoteMeta = (noteId, notesMeta) => {
+  var meta = notesMeta && notesMeta.find(note => note._id === noteId);
+  return meta;
+}
+
+const getQuestionCountFromMeta = (noteId, notesMeta) => {
+  const meta = getNoteMeta(noteId, notesMeta);
+  return meta && Number.isInteger(meta.questionCount) ? meta.questionCount : null;
+}
+
 // Leaf: Link, Bold
 export const Leaf = props => {
-
     if (props.leaf.type === 'link') {
-
+      const questionCount = getQuestionCountFromMeta(props.leaf.linkNoteId, props.notesMeta);
       // indicator colour
-      const linkType = Colours.indicator[1];
+      const linkType = questionCount === null ? Colours.deleted : Colours.indicator[questionCount];
 
       return (
           <PageLink {...props.attributes} indicator={linkType}>
@@ -202,6 +211,14 @@ export const Leaf = props => {
     if (props.leaf.italic) {
       return (
         <span {...props.attributes} style={{fontStyle: props.leaf.italic ? 'italic' : ''}}>
+            {props.children}
+        </span>
+      );
+    }
+
+    if (props.leaf.strikethrough) {
+      return (
+        <span {...props.attributes} style={{textDecoration: props.leaf.strikethrough ? 'line-through' : ''}}>
             {props.children}
         </span>
       );

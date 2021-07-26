@@ -4,18 +4,18 @@ import useNoteMutations from "./useNoteMutations";
 
 const useNotes = (project, noteId) => {
   const { note, loading } = useGetNote(project, noteId);
-  const { createNote, updateNote } = useNoteMutations(project);
+  const { createNote, updateNote, deleteNote } = useNoteMutations(project);
   return {
     loading,
     note,
     updateNote,
     createNote,
+    deleteNote
   };
 };
 export default useNotes;
 
 function useGetNote(project, noteId) {
-
   const { data, loading, error } = useQuery(
   gql`
     ${noteId ? noteWithIdGql : noteWithoutIdGql}
@@ -29,7 +29,7 @@ function useGetNote(project, noteId) {
   // If the query has finished, return the notes from the result data
   // Otherwise, return an empty list
   const note = data?.note;
-  console.log('note', note)
+
   return { note, loading };
 }
 

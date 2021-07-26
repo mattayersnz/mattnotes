@@ -25,14 +25,15 @@ const HunchEditor = (props) => {
 
     // Initiate State
     const value = props.value;
+    const notesMeta = props.notesMeta;
     const handleChange = (value) => {
       props.handleChange(value);
     };
 
     // Render Leaves & Elements
-    const renderLeaf = useCallback(props => {
-        return <Leaf {...props} />
-    }, [])
+    const renderLeaf = useCallback(props => { 
+        return <Leaf {...props} notesMeta={notesMeta} />
+    }, [notesMeta])
     const renderElement = useCallback(props => {
       switch (props.element.type) {
         case 'ol':
@@ -147,6 +148,12 @@ const HunchEditor = (props) => {
               if (event.metaKey && event.key === 's') {
                   event.preventDefault();
                   props.saveNote();
+              }
+
+              // Delete Note
+              if (event.metaKey && event.key === '\\') {
+                event.preventDefault();
+                props.deleteNote();
               }
 
               // Property
@@ -282,6 +289,19 @@ const HunchEditor = (props) => {
                       { match: n => Text.isText(n), split: match ? false : true}
                   );
               }
+
+              // Strikethrough Styling
+              if (event.metaKey && event.key === 'k') {
+                event.preventDefault();
+                const [match] = Editor.nodes(editor, {
+                  match: n => n.strikethrough === true,
+                })
+                Transforms.setNodes(
+                    editor,
+                    { strikethrough: match ? false : true },
+                    { match: n => Text.isText(n), split: match ? false : true}
+                );
+            }
 
 
             }}

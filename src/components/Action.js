@@ -1,19 +1,47 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styled from "styled-components";
 import enter from '../images/enter.svg';
 
-// Pass in Action Type
+export const Action = ({ actionType, children, hideEscape, onEnterClick, eventAction, eventCancel }) => {
 
-// {((actionText === 'Login') || (actionText === 'Reset Password?')) && <Email placeholder="Email"/>}
-// {(actionText === 'Login') && <Password placeholder="Password"/>}
+    const handleEventCancel = eventCancel;
+    const handleEventAction = eventAction;
 
-export const Action = ({ actionType, actionText, children, hideEscape, onEnterClick }) => {
+    const keyDownHandler = useCallback((event) => {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            handleEventAction();
+        }
+        else if (event.keyCode === 27) {
+            handleEventCancel();
+        }
+    }, [handleEventCancel, handleEventAction])
+    useEffect(() => {
+        window.addEventListener('keydown', keyDownHandler);
+        return () => {
+            window.removeEventListener("keydown", keyDownHandler);
+        };
+    }, [keyDownHandler]);
+
+    const getActionText = (actionType) => {
+        switch(actionType) {
+            case 'login': 
+                return 'Login';
+            case 'logout': 
+                return 'Logout';
+            case 'delete': 
+                return 'Delete Note?';
+            default: 
+                return 'Login';
+        }
+    }
+
     return (
         <div>
             <ActionBox>
                 {!hideEscape && <Esc>Esc</Esc>}
                 <ActionContent>
-                    <Text>{actionText}</Text>
+                    <Text>{getActionText(actionType)}</Text>
                 </ActionContent>
                 {actionType === 'login' &&
                     <ActionContent>

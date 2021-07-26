@@ -46,10 +46,30 @@ const getTitleFromNote = (blocks) => {
    return noteName || 'Title';
 }
 
+const getQuestionCountFromNote = (blocks) => {
+  let count = 0;
+  blocks.forEach(block => {
+    if (block.type === 'question') {
+      count += 1;
+    }
+  });
+  return count;
+}
+
 export const convertNoteToSaveFormat = (note, value) => {
     const graph = omitDeep(cloneDeep(note), ['__typename', '_id'])
     graph.blocks = value;
     graph.title = getTitleFromNote(graph.blocks);
+    graph.questionCount = getQuestionCountFromNote(graph.blocks);
     return omitDeep(cloneDeep(graph), ['__typename', '_id'])
 }
 
+export const getLinkedNoteIdsFromNote = (blocks) => {
+  let linkedNoteIds = [];
+  blocks.forEach(block => {
+    block.children.forEach(child => {
+      child.linkNoteId && linkedNoteIds.push(child.linkNoteId);
+    });
+  });
+  return linkedNoteIds;
+}
