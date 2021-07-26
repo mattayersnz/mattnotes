@@ -45,6 +45,7 @@ query GetNoteForUser($noteId: ObjectId!, $partition: String!) {
         bold
         italic
         underline
+        strikethrough
         linkNoteId
       }
     }
@@ -63,6 +64,7 @@ query GetNoteForUser($partition: String!) {
         bold
         italic
         underline
+        strikethrough
         linkNoteId
       }
     }
