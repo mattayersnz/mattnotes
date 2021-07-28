@@ -119,6 +119,7 @@ const HunchEditor = (props) => {
                   );
 
                   if (!selectedId) return;
+
                   props.getNote(selectedId);
               }
 

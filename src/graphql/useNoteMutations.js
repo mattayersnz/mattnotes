@@ -12,8 +12,20 @@ export default function useNoteMutations(project) {
 const CreateNoteMutation = gql`
   mutation CreateNote($note: NoteInsertInput!) {
     createdNote: insertOneNote(data: $note) {
+      _id
       _partition
-      ownerId
+      blocks {
+        type
+        children {
+          text
+          type
+          bold
+          italic
+          underline
+          strikethrough
+          linkNoteId
+        }
+      }
     }
   }
 `;
@@ -23,6 +35,18 @@ const UpdateNoteMutation = gql`
     updatedNote: updateOneNote(query: { _id: $noteId }, set: $updates) {
       _id
       _partition
+      blocks {
+        type
+        children {
+          text
+          type
+          bold
+          italic
+          underline
+          strikethrough
+          linkNoteId
+        }
+      }
     }
   }
 `;
@@ -40,16 +64,16 @@ const NoteFieldsFragment = gql`
   fragment NoteFields on Note {
     _id
     _partition
-    title
     blocks {
+      type
       children {
-        type
         text
-        linkNoteId
+        type
         bold
-        underline
         italic
+        underline
         strikethrough
+        linkNoteId
       }
     }
   }
