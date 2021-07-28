@@ -28,10 +28,27 @@ const HunchEditor = (props) => {
     const notesMeta = props.notesMeta;
     const handleChange = (value) => {
       props.handleChange(value);
+      if (!editor.selection) return;
+          props.setAnchor(editor.selection.anchor.offset);
+
+      const [node] = Editor.node(editor, editor.selection);
+      if (!node.text) return;
+
+      const textToSelection = node.text.slice(
+          editor.selection.anchor.offset - 2,
+          editor.selection.anchor.offset
+      );
+
+      props.setPrefix(textToSelection);
+
+      if (textToSelection === '[[') {
+          props.setIsSuggesting(true);
+      }
+
     };
 
     // Render Leaves & Elements
-    const renderLeaf = useCallback(props => { 
+    const renderLeaf = useCallback(props => {
         return <Leaf {...props} notesMeta={notesMeta} />
     }, [notesMeta])
     const renderElement = useCallback(props => {
@@ -74,7 +91,7 @@ const HunchEditor = (props) => {
             onKeyDown={event => {
 
               // Create Link
-              if (event.metaKey && event.key === '[') {
+              if (event.metaKey && event.key === 'l') {
                   event.preventDefault();
                   const [node] = Editor.node(editor, editor.selection);
                     if (!node.text) return;
@@ -130,8 +147,9 @@ const HunchEditor = (props) => {
               }
 
               // ListView
-              if (event.metaKey && event.key === 'k') {
+              if (event.metaKey && event.key === 'g') {
                 event.preventDefault();
+                props.setIsCommand(false)
                 props.setIsListView(!props.isListView);
               }
 
@@ -142,6 +160,33 @@ const HunchEditor = (props) => {
               if (props.isListView === true && event.key === 'Escape') {
                 event.preventDefault();
                 props.setIsListView(!props.isListView);
+              }
+
+              // NoteSuggest
+              if (props.isSuggesting === true && event.key !== 'Backspace') {
+                event.preventDefault();
+              }
+
+              if (props.isSuggesting === true && event.key === 'Escape') {
+                event.preventDefault();
+                props.setIsSuggesting(!props.isSuggesting);
+                props.setIsTyping(false);
+              }
+
+
+              // Command
+              if (event.metaKey && event.key === 'k') {
+                event.preventDefault();
+                props.setIsCommand(!props.isCommand);
+              }
+
+              if (props.isListView === true && event.key) {
+                event.preventDefault();
+              }
+
+              if (props.isCommand === true && event.key === 'Escape') {
+                event.preventDefault();
+                props.setIsCommand(!props.isCommand);
               }
 
               // Save Note
@@ -156,20 +201,6 @@ const HunchEditor = (props) => {
                 props.deleteNote();
               }
 
-              // Property
-              if (event.metaKey && event.key === '7') {
-                  event.preventDefault();
-                  const [match] = Editor.nodes(editor, {
-                    match: n => n.type === 'property',
-                  })
-                  Transforms.setNodes(
-                      editor,
-                      { type: match ? 'paragraph': 'property'},
-                      { match: n => Editor.isBlock(editor, n) }
-                  );
-              }
-
-
               // Title Block
               if (event.metaKey && event.key === ';') {
                   event.preventDefault();
@@ -183,8 +214,21 @@ const HunchEditor = (props) => {
                   );
               }
 
+              // Property
+              if (event.metaKey && event.key === '2') {
+                  event.preventDefault();
+                  const [match] = Editor.nodes(editor, {
+                    match: n => n.type === 'property',
+                  })
+                  Transforms.setNodes(
+                      editor,
+                      { type: match ? 'paragraph': 'property'},
+                      { match: n => Editor.isBlock(editor, n) }
+                  );
+              }
+
               // Star Block
-              if (event.metaKey && event.key === '8') {
+              if (event.metaKey && event.key === '3') {
                   event.preventDefault();
                   const [match] = Editor.nodes(editor, {
                     match: n => n.type === 'star',
@@ -197,7 +241,7 @@ const HunchEditor = (props) => {
               }
 
               // Question Block
-              if (event.metaKey && event.key === 'e') {
+              if (event.metaKey && event.key === '4') {
                 event.preventDefault();
                 const [match] = Editor.nodes(editor, {
                   match: n => n.type === 'question',
@@ -208,6 +252,12 @@ const HunchEditor = (props) => {
                     { match: n => Editor.isBlock(editor, n) }
                 );
               }
+
+              // // Cycle Links
+              // if (event.metaKey && event.key === '8') {
+              //   event.preventDefault();
+              //   console.log("Links", props.linkedNoteIds)
+              // }
 
               // Unordered List Block
               if (event.metaKey && event.key === '-') {
@@ -239,16 +289,12 @@ const HunchEditor = (props) => {
                       match: n => n.type === 'question' || 'star' || 'property' || 'link'
                   })
 
-                  // this isn't yet picking up the leaf.type = link
-
                   if (match) {
                     event.preventDefault()
-                    Editor.insertBreak(editor)
-                    Transforms.setNodes(
-                        editor,
-                        { type: 'paragraph'},
-                        { match: n => Editor.isBlock(editor, n) }
-                    );
+                    Transforms.insertNodes(editor, [{
+                      "type": "paragraph",
+                      "children": [{ "text": "" }]
+                    }])
                   }
               }
 
@@ -292,7 +338,7 @@ const HunchEditor = (props) => {
               }
 
               // Strikethrough Styling
-              if (event.metaKey && event.key === 'k') {
+              if (event.metaKey && event.key === 'd') {
                 event.preventDefault();
                 const [match] = Editor.nodes(editor, {
                   match: n => n.strikethrough === true,

@@ -26,13 +26,13 @@ export const Action = ({ actionType, children, hideEscape, onEnterClick, eventAc
 
     const getActionText = (actionType) => {
         switch(actionType) {
-            case 'login': 
+            case 'login':
                 return 'Login';
-            case 'logout': 
+            case 'logout':
                 return 'Logout';
-            case 'delete': 
+            case 'delete':
                 return 'Delete Note?';
-            default: 
+            default:
                 return 'Login';
         }
     }
@@ -98,7 +98,7 @@ width: 32px;
 const Esc = styled.span`
 font-family: 'Rubik', 'sans serif';
 font-size: .9rem;
-color: ${Colours.font.light}
+color: ${Colours.font.light};
 padding-bottom: 7px;
 text-align: right;
 align-self: flex-end;

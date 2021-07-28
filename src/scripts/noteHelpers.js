@@ -3,6 +3,7 @@ import omitDeep from 'omit-deep';
 
 export const createNewNoteBlocks = (backLinkNoteId, linkText) => {
   return {
+    title: linkText,
     blocks: [
       {
         "type": "title",
