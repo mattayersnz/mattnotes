@@ -24,8 +24,7 @@ const HunchEditor = (props) => {
     const editor = editorRef.current;
 
     // Initiate State
-    const value = props.value;
-    const notesMeta = props.notesMeta;
+    const { notesMeta, isMetaDataLoading, value } = props;
     const handleChange = (value) => {
       props.handleChange(value);
       if (!editor.selection) return;
@@ -49,8 +48,8 @@ const HunchEditor = (props) => {
 
     // Render Leaves & Elements
     const renderLeaf = useCallback(props => {
-        return <Leaf {...props} notesMeta={notesMeta} />
-    }, [notesMeta])
+        return <Leaf {...props} notesMeta={notesMeta} isMetaDataLoading={isMetaDataLoading}/>
+    }, [notesMeta, isMetaDataLoading])
     const renderElement = useCallback(props => {
       switch (props.element.type) {
         case 'ol':
