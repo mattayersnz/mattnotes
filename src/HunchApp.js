@@ -28,13 +28,7 @@ export default function HunchApp() {
   const currentUser = { id: currentLoggedInUser._id };
   const activeNoteId = currentLoggedInUser.customData.lastActiveNoteId ? currentLoggedInUser.customData.lastActiveNoteId.$oid : null;
 
-
   const [loadId, setLoadId] = useState(null);
-
-  useEffect(() => {
-    console.log('active note id')
-    //!loadId && activeNoteId && setLoadId(activeNoteId)
-  }, [activeNoteId, loadId]);
 
   const [linkedNoteIds, setLinkedNoteIds] = useState([]);
   const [id, setIdValue] = useState(null);
@@ -46,6 +40,10 @@ export default function HunchApp() {
   const [isAction, setIsAction] = useState(false);
 
   const [actionType, setActionType] = useState(false);
+
+  useEffect(() => {
+    !loadId && activeNoteId && !note && !value && setLoadId(activeNoteId)
+  }, [activeNoteId, loadId, note, value]);
 
   const { notes } = useAllNotes(currentUser);
   const { loadingMeta, notesMeta } = useNotesLinked(currentUser, linkedNoteIds)
@@ -90,7 +88,7 @@ export default function HunchApp() {
 
   const GetNote = async (linkedNoteId) => {
     //set users new last active note id
-    //updateUser({ lastActiveNoteId: linkedNoteId });
+    updateUser({ lastActiveNoteId: linkedNoteId });
     // save current note before loading a new one
     saveNote();
     setLoadId(linkedNoteId);

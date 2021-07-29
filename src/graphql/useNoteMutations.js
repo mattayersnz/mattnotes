@@ -105,6 +105,7 @@ function useCreateNote(project) {
           _id: newId,
           _partition: `note=${project.id}`,
           ownerId: project.id,
+          createdDateUtc: new Date(),
           ...note,
         },
       }
@@ -134,6 +135,7 @@ function useUpdateNote(project) {
   });
 
   const updateNote = async (noteId, updates) => {
+    updates.updatedDateUtc = new Date();
     const { updatedNote } = await updateNoteMutation({
       variables: { noteId: noteId, updates },
     });
