@@ -106,6 +106,7 @@ function useCreateNote(project) {
           _partition: `note=${project.id}`,
           ownerId: project.id,
           createdDateUtc: new Date(),
+          questionCount: 0,
           ...note,
         },
       }
