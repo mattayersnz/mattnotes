@@ -57,6 +57,12 @@ export default function HunchApp() {
     setActionType('logout');
   }
 
+  //logout actions
+  const logout = () => {
+    app.logOut();
+    setLoadId(null);
+  }
+
   const actionEnd = () => {
     setIsAction(false);
   }
@@ -134,7 +140,7 @@ export default function HunchApp() {
       />
       { isAction && <Action 
         actionType={actionType} 
-        eventAction={actionType === 'logout' ? app.logOut : deleteNoteFn} 
+        eventAction={actionType === 'logout' ? logout : deleteNoteFn} 
         eventCancel={actionEnd}
       /> }
       { isListView && <ListView list={notes} getNote={GetNote} setIsListView={setIsListView}/> }

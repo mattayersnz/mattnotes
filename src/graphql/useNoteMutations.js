@@ -103,7 +103,7 @@ function useCreateNote(project) {
       variables: {
         note: {
           _id: newId,
-          _partition: `note=${project.id}`,
+          _partition: [`note=${project.id}`],
           ownerId: project.id,
           createdDateUtc: new Date(),
           questionCount: 0,
@@ -117,23 +117,23 @@ function useCreateNote(project) {
 }
 
 function useUpdateNote(project) {
-  const [updateNoteMutation] = useMutation(UpdateNoteMutation, {
+  const [updateNoteMutation] = useMutation(UpdateNoteMutation);//, {
     // Manually save added Notes into the Apollo cache so that Note queries automatically update
     // For details, refer to https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    update: (cache, { data: { updatedNote } }) => {
-      cache.modify({
-        fields: {
-          notes: (existingNotes = []) => { 
-            //removes the note from cache when saving to override what there
-            const filteredNotes = existingNotes.filter((value) => value && value._ref !== updatedNote._partition );
-            return [
-              ...filteredNotes
-            ]
-          },
-        },
-      });
-    },
-  });
+  //   update: (cache, { data: { updatedNote } }) => {
+  //     cache.modify({
+  //       fields: {
+  //         notes: (existingNotes = []) => { 
+  //           //removes the note from cache when saving to override what there
+  //           const filteredNotes = existingNotes.filter((value) => value && value._ref !== updatedNote._partition );
+  //           return [
+  //             ...filteredNotes
+  //           ]
+  //         },
+  //       },
+  //     });
+  //   },
+  // });
 
   const updateNote = async (noteId, updates) => {
     updates.updatedDateUtc = new Date();
@@ -155,3 +155,5 @@ function useDeleteNote(project) {
   };
   return deleteNote;
 }
+
+

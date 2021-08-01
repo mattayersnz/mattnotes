@@ -4,7 +4,7 @@ import { useRealmApp } from "../RealmApp";
 import styled from "styled-components";
 import validator from "validator";
 import Loading from "./Loading";
-import { Action } from "./Action";
+import { Action } from "./LoginAction";
 import { Colours } from "../globalstyles/Colours";
 
 export default function LoginScreen() {
@@ -21,8 +21,6 @@ export default function LoginScreen() {
     const [error, setError] = React.useState({});
     // Whenever the mode changes, clear the form inputs
     React.useEffect(() => {
-        setEmail("email@example.com");
-        setPassword("password");
         setError({});
     }, [mode]);
 
@@ -32,6 +30,8 @@ export default function LoginScreen() {
         setError((e) => ({ ...e, password: null }));
         try {
             await app.logIn(Realm.Credentials.emailPassword(email, password));
+            setEmail("");
+            setPassword("");
         } catch (err) {
             handleAuthenticationError(err, setError);
         }
@@ -60,7 +60,7 @@ export default function LoginScreen() {
             ) : (
                 <Action
                     hideEscape={true}
-                    actionType="login"
+                    actionType={mode}
                     actionText={mode === "login" ? "Login" : "Register an Account"}
                     onEnterClick={mode === "login" ? handleLogin : handleRegistrationAndLogin}
                 >
@@ -69,7 +69,7 @@ export default function LoginScreen() {
                             <Email
                                 type="email"
                                 label="Email"
-                                placeholder="your.email@example.com"
+                                placeholder="Email Address"
                                 onChange={(e) => {
                                     setError((e) => ({ ...e, email: null }));
                                     setEmail(e.target.value);
@@ -89,7 +89,7 @@ export default function LoginScreen() {
                             <Password
                                 type="password"
                                 label="Password"
-                                placeholder="pa55w0rd"
+                                placeholder="Password"
                                 onChange={(e) => {
                                     setPassword(e.target.value);
                                 }}
