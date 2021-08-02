@@ -29,7 +29,7 @@ export default function HunchApp() {
   const currentLoggedInUser = app.currentUser;
   const currentUser = { id: currentLoggedInUser._id };
   const activeNoteId = currentLoggedInUser.customData.lastActiveNoteId ? currentLoggedInUser.customData.lastActiveNoteId.$oid : null;
-
+  console.log('activeNoteId', currentLoggedInUser)
   const [loadId, setLoadId] = useState(null);
 
   const [linkedNoteIds, setLinkedNoteIds] = useState([]);
@@ -116,15 +116,11 @@ export default function HunchApp() {
     window.scrollTo(0, 0);
   };
 
-  useEffect(() => {
-    if (isCreating) {
-      (async () => {
-        const newId = new ObjectId();
-        await createNote(newId, createInitialNoteBlocks());
-        setLoadId(newId);
-      })();
-    }
- }, [isCreating, createNote, setLoadId]);
+//   useEffect(() => {
+//     if (isCreating) {
+      
+//     }
+//  }, [isCreating, createNote, setLoadId]);
 
   if (loading || !note) {
     if (loadId && !loading && !note) {
@@ -132,6 +128,11 @@ export default function HunchApp() {
     } else if (!loading && !note && !isCreating && !loadId) {
       // Create a note if none
       setIsCreating(true);
+      (async () => {
+        const newId = new ObjectId();
+        await createNote(newId, createInitialNoteBlocks());
+        setLoadId(newId);
+      })();
     }
     return <Loading stage={2} />;
   }

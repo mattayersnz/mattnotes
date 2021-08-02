@@ -4,7 +4,7 @@ import HunchApp from "./HunchApp";
 import RealmApolloProvider from "./graphql/RealmApolloProvider";
 import { useRealmApp, RealmAppProvider } from "./RealmApp";
 
-export const APP_ID = "hunchapp-treul";
+export const APP_ID = "hunchapp_staging-zipht";
 
 const RequireLoggedInUser = ({ children }) => {
   // Only render children if there is a logged in user.
