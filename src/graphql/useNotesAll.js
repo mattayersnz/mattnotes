@@ -16,7 +16,7 @@ function useGetNote(project) {
   gql`
     ${allNotesGql}
     `,
-    { variables: { partition: `note=${project.id}`} }
+    { variables: { partition: [`note=${project.id}`]} }
   );
 
   if (error) {
@@ -29,8 +29,8 @@ function useGetNote(project) {
 }
 
 var allNotesGql = `
-query GetNotesForUser($partition: String!) {
-  notes(query: { _partition: $partition }) {
+query GetNotesForUser($partition: [String!]) {
+  notes(query: { _partition_in: $partition }) {
     _id
     title
   }

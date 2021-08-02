@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 const useNotesLinked = (project, noteIds) => {
     const { notes, loading } = useGetNoteMeta(project, noteIds);
     return {
-      loading,
+      loadingMeta: loading,
       notesMeta: notes
     };
   };
@@ -13,14 +13,14 @@ const useNotesLinked = (project, noteIds) => {
   function useGetNoteMeta(project, noteIds) {
     const { data, loading, error } = useQuery(
     gql`
-      query GetNoteForUser($noteIds: [ObjectId!], $partition: String!) {
-        notes(query: { _id_in: $noteIds, _partition: $partition}) {
+      query GetNoteForUser($noteIds: [ObjectId!], $partition: [String!]) {
+        notes(query: { _id_in: $noteIds, _partition_in: $partition }) {
           _id
           questionCount
         }
       }
       `,
-      { variables: { noteIds: noteIds, partition: `note=${project.id}`} }
+      { variables: { noteIds: noteIds, partition: [`note=${project.id}`]} }
     );
   
     

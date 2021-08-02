@@ -12,8 +12,20 @@ export default function useNoteMutations(project) {
 const CreateNoteMutation = gql`
   mutation CreateNote($note: NoteInsertInput!) {
     createdNote: insertOneNote(data: $note) {
+      _id
       _partition
-      ownerId
+      blocks {
+        type
+        children {
+          text
+          type
+          bold
+          italic
+          underline
+          strikethrough
+          linkNoteId
+        }
+      }
     }
   }
 `;
@@ -23,6 +35,18 @@ const UpdateNoteMutation = gql`
     updatedNote: updateOneNote(query: { _id: $noteId }, set: $updates) {
       _id
       _partition
+      blocks {
+        type
+        children {
+          text
+          type
+          bold
+          italic
+          underline
+          strikethrough
+          linkNoteId
+        }
+      }
     }
   }
 `;
@@ -40,16 +64,16 @@ const NoteFieldsFragment = gql`
   fragment NoteFields on Note {
     _id
     _partition
-    title
     blocks {
+      type
       children {
-        type
         text
-        linkNoteId
+        type
         bold
-        underline
         italic
+        underline
         strikethrough
+        linkNoteId
       }
     }
   }
@@ -79,8 +103,10 @@ function useCreateNote(project) {
       variables: {
         note: {
           _id: newId,
-          _partition: `note=${project.id}`,
+          _partition: [`note=${project.id}`],
           ownerId: project.id,
+          createdDateUtc: new Date(),
+          questionCount: 0,
           ...note,
         },
       }
@@ -91,25 +117,26 @@ function useCreateNote(project) {
 }
 
 function useUpdateNote(project) {
-  const [updateNoteMutation] = useMutation(UpdateNoteMutation, {
+  const [updateNoteMutation] = useMutation(UpdateNoteMutation);//, {
     // Manually save added Notes into the Apollo cache so that Note queries automatically update
     // For details, refer to https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    update: (cache, { data: { updatedNote } }) => {
-      cache.modify({
-        fields: {
-          notes: (existingNotes = []) => { 
-            //removes the note from cache when saving to override what there
-            const filteredNotes = existingNotes.filter((value) => value && value._ref !== updatedNote._partition );
-            return [
-              ...filteredNotes
-            ]
-          },
-        },
-      });
-    },
-  });
+  //   update: (cache, { data: { updatedNote } }) => {
+  //     cache.modify({
+  //       fields: {
+  //         notes: (existingNotes = []) => { 
+  //           //removes the note from cache when saving to override what there
+  //           const filteredNotes = existingNotes.filter((value) => value && value._ref !== updatedNote._partition );
+  //           return [
+  //             ...filteredNotes
+  //           ]
+  //         },
+  //       },
+  //     });
+  //   },
+  // });
 
   const updateNote = async (noteId, updates) => {
+    updates.updatedDateUtc = new Date();
     const { updatedNote } = await updateNoteMutation({
       variables: { noteId: noteId, updates },
     });
@@ -128,3 +155,5 @@ function useDeleteNote(project) {
   };
   return deleteNote;
 }
+
+

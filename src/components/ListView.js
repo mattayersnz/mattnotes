@@ -55,16 +55,6 @@ const ListView = ({ list, getNote, setIsListView }) => {
   const upPress = useKeyPress("ArrowUp");
   const enterPress = useKeyPress("Enter");
   const [cursor, setCursor] = useState(0);
-  // const [hovered, setHovered] = useState(undefined);
-
-
-  // const goToNewNote = useCallback((item) => {
-  //   item && item._id && getNote(item._id);
-  //   setIsListView(false)
-  // }, [setIsListView, getNote]);
-  // // const goToNewNote = (item) => {
-  //
-  // // }
 
   useEffect(() => {
     if (items.length && downPress) {
@@ -86,11 +76,6 @@ const ListView = ({ list, getNote, setIsListView }) => {
       setIsListView(false)
     }
   }, [cursor, enterPress, items, getNote, setIsListView]);
-  // useEffect(() => {
-  //   if (items.length && hovered) {
-  //     setCursor(items.indexOf(hovered));
-  //   }
-  // }, [hovered, items]);
 
   return (
     <View>

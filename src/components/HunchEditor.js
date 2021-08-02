@@ -16,6 +16,11 @@ import { noteLayout } from './NoteLayout';
 import { useBeforeunload } from 'react-beforeunload';
 
 
+const doesLinkedNoteIdExist = (selectedId, notesMeta) => {
+  const noteMeta = notesMeta.find(n => n._id === selectedId);
+  return !!noteMeta;
+}
+
 const HunchEditor = (props) => {
 
     // Initiate Editor
@@ -134,8 +139,10 @@ const HunchEditor = (props) => {
                         return false
                       }}
                   );
+                  
+                  //check if selectedId exists in metadata
+                  if (!selectedId || !doesLinkedNoteIdExist(selectedId, notesMeta)) return;
 
-                  if (!selectedId) return;
                   props.getNote(selectedId);
               }
 

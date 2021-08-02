@@ -30,12 +30,7 @@ export default function HunchApp() {
   const currentUser = { id: currentLoggedInUser._id };
   const activeNoteId = currentLoggedInUser.customData.lastActiveNoteId ? currentLoggedInUser.customData.lastActiveNoteId.$oid : null;
 
-
   const [loadId, setLoadId] = useState(null);
-
-  useEffect(() => {
-    setLoadId(activeNoteId)
-  }, [activeNoteId]);
 
   const [linkedNoteIds, setLinkedNoteIds] = useState([]);
   const [id, setIdValue] = useState(null);
@@ -59,6 +54,10 @@ export default function HunchApp() {
         setCursorPosition(sel.getRangeAt(0).getBoundingClientRect());
     }, [value]);
 
+  useEffect(() => {
+    !loadId && activeNoteId && !note && !value && setLoadId(activeNoteId)
+  }, [activeNoteId, loadId, note, value]);
+
   const { notes } = useAllNotes(currentUser);
   const { loadingMeta, notesMeta } = useNotesLinked(currentUser, linkedNoteIds)
   const handleChange = (updatedValue) => {
@@ -71,6 +70,12 @@ export default function HunchApp() {
   const logoutStart = () => {
     setIsAction(true);
     setActionType('logout');
+  }
+
+  //logout actions
+  const logout = () => {
+    app.logOut();
+    setLoadId(null);
   }
 
   const actionEnd = () => {
@@ -103,13 +108,23 @@ export default function HunchApp() {
   }
 
   const GetNote = async (linkedNoteId) => {
+    //set users new last active note id
+    updateUser({ lastActiveNoteId: linkedNoteId });
     // save current note before loading a new one
     saveNote();
     setLoadId(linkedNoteId);
-    //set users new last active note id
-    updateUser({ lastActiveNoteId: linkedNoteId });
     window.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    if (isCreating) {
+      (async () => {
+        const newId = new ObjectId();
+        await createNote(newId, createInitialNoteBlocks());
+        setLoadId(newId);
+      })();
+    }
+ }, [isCreating, createNote, setLoadId]);
 
   if (loading || !note) {
     if (loadId && !loading && !note) {
@@ -117,11 +132,6 @@ export default function HunchApp() {
     } else if (!loading && !note && !isCreating && !loadId) {
       // Create a note if none
       setIsCreating(true);
-      (async () => {
-        const newId = new ObjectId();
-        await createNote(newId, createInitialNoteBlocks());
-      })();
-
     }
     return <Loading stage={2} />;
   }
@@ -160,9 +170,9 @@ export default function HunchApp() {
         setIsTyping={setIsTyping}
         isMetaDataLoading={loadingMeta}
       />
-      { isAction && <Action
-        actionType={actionType}
-        eventAction={actionType === 'logout' ? app.logOut : deleteNoteFn}
+      { isAction && <Action 
+        actionType={actionType} 
+        eventAction={actionType === 'logout' ? logout : deleteNoteFn} 
         eventCancel={actionEnd}
       /> }
       { isListView && <ListView
