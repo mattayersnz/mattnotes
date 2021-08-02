@@ -7,7 +7,6 @@ export const Action = ({ actionType, children, hideEscape, onEnterClick, eventAc
 
     const handleEventCancel = eventCancel;
     const handleEventAction = eventAction;
-
     const keyDownHandler = useCallback((event) => {
         event.preventDefault();
         if (event.keyCode === 13) {
@@ -57,6 +56,9 @@ export const Action = ({ actionType, children, hideEscape, onEnterClick, eventAc
 
 
 const ActionBox = styled.div`
+position: fixed;
+top: 40%;
+
 padding: 24px;
 background: #313131;
 border-radius: 5px;

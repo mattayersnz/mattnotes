@@ -15,5 +15,6 @@ export const Colours = {
       "linear-gradient(200deg, #FFBF00 7.39%, #FF4F47 24.79%, #6A27BF 56.55%)"
     ],
   deleted: "#CCCCCC",
-  loadingLink: "#292929"
+  loadingLink: "#292929",
+  errorRed: "#e45b5b"
 }

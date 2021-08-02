@@ -57,6 +57,12 @@ export default function HunchApp() {
     setActionType('logout');
   }
 
+  //logout actions
+  const logout = () => {
+    app.logOut();
+    setLoadId(null);
+  }
+
   const actionEnd = () => {
     setIsAction(false);
   }
@@ -95,17 +101,22 @@ export default function HunchApp() {
     window.scrollTo(0, 0);
   };
 
+  useEffect(() => {
+    if (isCreating) {
+      (async () => {
+        const newId = new ObjectId();
+        await createNote(newId, createInitialNoteBlocks());
+        setLoadId(newId);
+      })();
+    }
+ }, [isCreating, createNote, setLoadId]);
+
   if (loading || !note) {
     if (loadId && !loading && !note) {
       setLoadId(null);
     } else if (!loading && !note && !isCreating && !loadId) {
       // Create a note if none
       setIsCreating(true);
-      (async () => {
-        const newId = new ObjectId();
-        await createNote(newId, createInitialNoteBlocks());
-      })();
-
     }
     return <Loading stage={2} />;
   }
@@ -134,7 +145,7 @@ export default function HunchApp() {
       />
       { isAction && <Action 
         actionType={actionType} 
-        eventAction={actionType === 'logout' ? app.logOut : deleteNoteFn} 
+        eventAction={actionType === 'logout' ? logout : deleteNoteFn} 
         eventCancel={actionEnd}
       /> }
       { isListView && <ListView list={notes} getNote={GetNote} setIsListView={setIsListView}/> }

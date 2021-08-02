@@ -4,7 +4,7 @@ import { useRealmApp } from "../RealmApp";
 import styled from "styled-components";
 import validator from "validator";
 import Loading from "./Loading";
-import { Action } from "./Action";
+import { Action } from "./LoginAction";
 import { Colours } from "../globalstyles/Colours";
 
 export default function LoginScreen() {
@@ -21,10 +21,8 @@ export default function LoginScreen() {
     const [error, setError] = React.useState({});
     // Whenever the mode changes, clear the form inputs
     React.useEffect(() => {
-        setEmail("email@example.com");
-        setPassword("password");
         setError({});
-    }, [mode]);
+    }, [mode, setError]);
 
     const [isLoggingIn, setIsLoggingIn] = React.useState(false);
     const handleLogin = async () => {
@@ -32,8 +30,11 @@ export default function LoginScreen() {
         setError((e) => ({ ...e, password: null }));
         try {
             await app.logIn(Realm.Credentials.emailPassword(email, password));
+            setEmail("");
+            setPassword("");
         } catch (err) {
             handleAuthenticationError(err, setError);
+            setIsLoggingIn(false);
         }
     };
 
@@ -47,11 +48,14 @@ export default function LoginScreen() {
                 return await handleLogin();
             } catch (err) {
                 handleAuthenticationError(err, setError);
+                setIsLoggingIn(false);
             }
         } else {
             setError((err) => ({ ...err, email: "Email is invalid." }));
         }
     };
+
+    console.log('error', error);
 
     return (
         <Container>
@@ -60,23 +64,24 @@ export default function LoginScreen() {
             ) : (
                 <Action
                     hideEscape={true}
-                    actionType="login"
+                    actionType={mode}
                     actionText={mode === "login" ? "Login" : "Register an Account"}
                     onEnterClick={mode === "login" ? handleLogin : handleRegistrationAndLogin}
                 >
                     <LoginForm>
+                        <ErrorText>{error.errorMessage}</ErrorText>
                         <LoginFormRow>
                             <Email
                                 type="email"
                                 label="Email"
-                                placeholder="your.email@example.com"
+                                placeholder="Email Address"
                                 onChange={(e) => {
                                     setError((e) => ({ ...e, email: null }));
                                     setEmail(e.target.value);
                                 }}
                                 value={email}
                                 state={
-                                    error.email
+                                    (error.email || error.password) 
                                         ? "error"
                                         : validator.isEmail(email)
                                             ? "valid"
@@ -89,13 +94,13 @@ export default function LoginScreen() {
                             <Password
                                 type="password"
                                 label="Password"
-                                placeholder="pa55w0rd"
+                                placeholder="Password"
                                 onChange={(e) => {
                                     setPassword(e.target.value);
                                 }}
                                 value={password}
                                 state={
-                                    error.password ? "error" : error.password ? "valid" : "none"
+                                    (error.email || error.password) ? "error" : error.password ? "valid" : "none"
                                 }
                                 errorMessage={error.password}
                             />
@@ -123,25 +128,27 @@ export default function LoginScreen() {
 }
 
 function handleAuthenticationError(err, setError) {
+    console.log('err', err)
     const { status, message } = parseAuthenticationError(err);
     const errorType = message || status;
     switch (errorType) {
         case "invalid username":
-            setError((prevErr) => ({ ...prevErr, email: "Invalid email address." }));
+            setError((prevErr) => ({ ...prevErr, errorMessage: 'Invalid username or password', email: "Invalid email address." }));
             break;
         case "invalid username/password":
         case "invalid password":
         case "401":
-            setError((err) => ({ ...err, password: "Incorrect password." }));
+            setError((err) => ({ ...err, errorMessage: 'Invalid username or password', password: "Incorrect password." }));
             break;
         case "name already in use":
         case "409":
-            setError((err) => ({ ...err, email: "Email is already registered." }));
+            setError((err) => ({ ...err, errorMessage: 'Email is already registered.', email: "Email is already registered." }));
             break;
         case "password must be between 6 and 128 characters":
         case "400":
             setError((err) => ({
                 ...err,
+                errorMessage: 'Password must be between 6 and 128 characters.',
                 password: "Password must be between 6 and 128 characters.",
             }));
             break;
@@ -196,6 +203,7 @@ const LoginForm = styled.div`
 display: flex;
 flex-direction: column;
 width: 100%;
+margin-top: 28px;
 `;
 
 const LoginFormRow = styled.div`
@@ -207,10 +215,10 @@ const Email = styled.input`
 width:90%;
 font-size: 1rem;
 background: #313131;
-margin-top: 48px;
+margin-top: 20px;
 margin-bottom: 14px;
 border: none;
-border-bottom: 1px solid #909090;
+border-bottom: ${({state}) => state === 'error' ? `1px solid ${Colours.errorRed}` : '1px solid #909090'};
 align-self: flex-start;
 outline: none;
 color: ${Colours.font.light};
@@ -222,8 +230,13 @@ font-size: 1rem;
 background: #313131;
 margin-bottom: 0px;
 border: none;
-border-bottom: 1px solid #909090;
+border-bottom: ${({state}) => state === 'error' ? `1px solid ${Colours.errorRed}` : '1px solid #909090'};
 align-self: flex-start;
 outline: none;
 color: ${Colours.font.light};
 `
+
+const ErrorText = styled.span`
+  line-height: 18px;
+  color: ${Colours.errorRed};
+`;

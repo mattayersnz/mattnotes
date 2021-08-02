@@ -20,7 +20,7 @@ function useGetNote(project, noteId) {
   gql`
     ${noteId ? noteWithIdGql : noteWithoutIdGql}
     `,
-    { variables: { noteId: noteId, partition: `note=${project.id}`} }
+    { variables: { noteId: noteId, partition: [`note=${project.id}`]} }
   );
 
   if (error) {
@@ -34,7 +34,7 @@ function useGetNote(project, noteId) {
 }
 
 var noteWithIdGql = `
-query GetNoteForUser($noteId: ObjectId!, $partition: String!) {
+query GetNoteForUser($noteId: ObjectId!, $partition: [String!]) {
   note(query: { _id: $noteId, _partition: $partition}) {
     _id
     blocks {
@@ -53,8 +53,8 @@ query GetNoteForUser($noteId: ObjectId!, $partition: String!) {
 }`;
 
 var noteWithoutIdGql = `
-query GetNoteForUser($partition: String!) {
-  note(query: { _partition: $partition}) {
+query GetNoteForUser($partition: [String!]) {
+  note(query: { _partition_in: $partition}) {
     _id
     blocks {
       type
