@@ -101,17 +101,22 @@ export default function HunchApp() {
     window.scrollTo(0, 0);
   };
 
+  useEffect(() => {
+    if (isCreating) {
+      (async () => {
+        const newId = new ObjectId();
+        await createNote(newId, createInitialNoteBlocks());
+        setLoadId(newId);
+      })();
+    }
+ }, [isCreating, createNote, setLoadId]);
+
   if (loading || !note) {
     if (loadId && !loading && !note) {
       setLoadId(null);
     } else if (!loading && !note && !isCreating && !loadId) {
       // Create a note if none
       setIsCreating(true);
-      (async () => {
-        const newId = new ObjectId();
-        await createNote(newId, createInitialNoteBlocks());
-      })();
-
     }
     return <Loading stage={2} />;
   }
