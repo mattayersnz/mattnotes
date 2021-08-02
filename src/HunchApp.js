@@ -7,6 +7,8 @@ import useUsers from "./graphql/useUsers";
 import useAllNotes from './graphql/useNotesAll';
 import useNotesLinked from './graphql/useNotesLinked';
 import { Action } from './components/Action';
+import { Command } from './components/Command';
+import { NoteSuggest } from './components/NoteSuggest';
 import { ObjectId } from "bson";
 import {
   convertNoteToSaveFormat,
@@ -37,9 +39,20 @@ export default function HunchApp() {
 
   const [isCreating, setIsCreating] = useState(false);
   const [value, setValue] = useState();
+  const [isCommand, setIsCommand] = useState(false);
   const [isAction, setIsAction] = useState(false);
-
   const [actionType, setActionType] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState(null);
+  const [anchor, setAnchor] = useState(null);
+  const [prefix, setPrefix] = useState(null);
+  const [isSuggesting, setIsSuggesting] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return;
+        setCursorPosition(sel.getRangeAt(0).getBoundingClientRect());
+    }, [value]);
 
   useEffect(() => {
     !loadId && activeNoteId && !note && !value && setLoadId(activeNoteId)
@@ -50,6 +63,8 @@ export default function HunchApp() {
   const handleChange = (updatedValue) => {
     setValue(updatedValue)
   };
+
+  console.log("Notes", notes)
 
   //logout actions
   const logoutStart = () => {
@@ -85,7 +100,7 @@ export default function HunchApp() {
     updateNote(id, convertNoteToSaveFormat(note, value));
   }
 
-  const newNote = (selectedText) => {
+    const newNote = (selectedText) => {
     const newId = new ObjectId();
     createNote(newId, createNewNoteBlocks(id, selectedText));
     setLinkedNoteIds([...linkedNoteIds, newId.toString()])
@@ -141,6 +156,18 @@ export default function HunchApp() {
         isAction={isAction}
         isListView={isListView}
         setIsListView={setIsListView}
+        isCommand={isCommand}
+        setIsCommand={setIsCommand}
+        cursorPosition={cursorPosition}
+        setCursorPosition={setCursorPosition}
+        anchor={anchor}
+        setAnchor={setAnchor}
+        prefix={prefix}
+        setPrefix={setPrefix}
+        isSuggesting={isSuggesting}
+        setIsSuggesting={setIsSuggesting}
+        isTyping={isTyping}
+        setIsTyping={setIsTyping}
         isMetaDataLoading={loadingMeta}
       />
       { isAction && <Action 
@@ -148,7 +175,30 @@ export default function HunchApp() {
         eventAction={actionType === 'logout' ? logout : deleteNoteFn} 
         eventCancel={actionEnd}
       /> }
-      { isListView && <ListView list={notes} getNote={GetNote} setIsListView={setIsListView}/> }
+      { isListView && <ListView
+                        list={notes}
+                        getNote={GetNote}
+                        setIsListView={setIsListView}/> }
+      { isCommand && <Command /> }
+      { isSuggesting && cursorPosition && <NoteSuggest
+                                            newNote={newNote}
+                                            cursorPosition={cursorPosition}
+                                            getNote={GetNote}
+                                            list={notes}
+                                            setIsSuggesting={setIsSuggesting}
+                                            isTyping={isTyping}
+                                            setIsTyping={setIsTyping}
+                                            currentUser={currentUser}
+                                            createNote={createNote}
+                                            createNewNoteBlocks={createNewNoteBlocks}
+                                            id={id}
+                                            setLinkedNoteIds={setLinkedNoteIds}
+                                            linkedNoteIds={linkedNoteIds}
+                                            saveNote={saveNote}
+                                            setLoadId={setLoadId}
+                                            updateUser={updateUser}
+                                            activeNoteId={activeNoteId}
+                                            />}
     </Container>
   );
 }
