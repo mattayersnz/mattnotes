@@ -11,15 +11,6 @@ p {
   font-size: 18px;
 }
 
-@media only screen and (max-width: 680px) {
-  .container {
-    padding-top: 10%;
-    padding-bottom: 10%;
-    padding-left: 0%;
-    padding-right: 0%;
-  }
-}
-
 a {
   font-family: 'Roboto Mono', monospace;
   font-size: 18px;
@@ -37,4 +28,13 @@ a {
   padding-bottom: 10%;
   padding-left: 20%;
   padding-right: 20%;
+}
+
+@media only screen and (max-width: 680px) {
+  .container {
+    padding-top: 10%;
+    padding-bottom: 10%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 }
