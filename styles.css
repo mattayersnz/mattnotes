@@ -11,6 +11,18 @@ p {
   font-size: 18px;
 }
 
+a {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 18px;
+  text-decoration: none;
+  color: black;
+}
+
+.mail {
+  padding-top: 48px;
+  font-weight: bold;
+}
+
 .container {
   padding-top: 6%;
   padding-bottom: 10%;
