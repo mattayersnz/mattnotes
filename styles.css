@@ -11,7 +11,7 @@ p {
   font-size: 18px;
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 680px) {
   .container {
     padding-top: 10%;
     padding-bottom: 10%;
