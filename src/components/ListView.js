@@ -44,7 +44,7 @@ const ListItem = ({
   </div>
 );
 
-const ListView = ({ list, getNote, setIsListView }) => {
+const ListView = ({ list, getNote, setIsListView, isError, setIsError }) => {
 
   // taking an object of notes with blocks and making it into title blocks as items
   const items = list.filter(function (item) {
@@ -72,10 +72,14 @@ const ListView = ({ list, getNote, setIsListView }) => {
 
   useEffect(() => {
     if (items.length && enterPress) {
-      items[cursor] && getNote(items[cursor]._id);
-      setIsListView(false)
+      try {
+        items[cursor] && getNote(items[cursor]._id);
+        setIsListView(false)
+      } catch {
+        setIsError(true);
+      }
     }
-  }, [cursor, enterPress, items, getNote, setIsListView]);
+  }, [cursor, enterPress, items, getNote, setIsListView, setIsError]);
 
   return (
     <View>

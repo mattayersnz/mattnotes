@@ -95,61 +95,72 @@ const HunchEditor = (props) => {
             onKeyDown={event => {
 
               // Create Link
-              if (event.metaKey && event.key === 'l') {
+              if (event.metaKey && event.key === 'e') {
                   event.preventDefault();
-                  const [node] = Editor.node(editor, editor.selection);
-                    if (!node.text) return;
+                  try {
+                    const [node] = Editor.node(editor, editor.selection);
+                      if (!node.text) return;
 
-                  const [match] = Editor.nodes(editor, {
-                    match: n => n.type === 'link',
-                  })
+                    const [match] = Editor.nodes(editor, {
+                      match: n => n.type === 'link',
+                    })
 
-                  Transforms.setNodes(
-                      editor,
-                      {
-                        type: match ? 'text' : 'link',
-                        linkNoteId: props.newNote(node.text)
-                      },
-                      { match: n => Text.isText(n), split: match ? false : true}
-                  );
+                    Transforms.setNodes(
+                        editor,
+                        {
+                          type: match ? 'text' : 'link',
+                          linkNoteId: props.newNote(node.text)
+                        },
+                        { match: n => Text.isText(n), split: match ? false : true}
+                    );
 
-                  // const [node] = Editor.node(editor, editor.selection);
-                  //   if (!node.text) return;
+                    // const [node] = Editor.node(editor, editor.selection);
+                    //   if (!node.text) return;
 
-                  // const selectedText = node.text.slice(
-                  //     editor.selection.anchor.offset,
-                  //     editor.selection.focus.offset
-                  // );
+                    // const selectedText = node.text.slice(
+                    //     editor.selection.anchor.offset,
+                    //     editor.selection.focus.offset
+                    // );
 
-                //   const graph = data.graph
+                    //   const graph = data.graph
 
-                //   NewNote(graph, id, newNoteId, selectedText)
+                    //   NewNote(graph, id, newNoteId, selectedText)
+                  } catch {
+                    props.setIsError(true);
+                  }
 
               }
 
               // Navigate to Link
               if (event.metaKey && event.key === 'y') {
                   event.preventDefault();
-                  let selectedId = '';
-                  Transforms.setNodes(
-                      editor,
-                      { },
-                      { match: n => {
-                        selectedId = n.linkNoteId;
-                        return false
-                      }}
-                  );
-                  
-                  //check if selectedId exists in metadata
-                  if (!selectedId || !doesLinkedNoteIdExist(selectedId, notesMeta)) return;
+                  try {
+                    let selectedId = '';
+                    Transforms.setNodes(
+                        editor,
+                        { },
+                        { match: n => {
+                          selectedId = n.linkNoteId;
+                          return false
+                        }}
+                    );
 
-                  props.getNote(selectedId);
+                    //check if selectedId exists in metadata
+                    if (!selectedId || !doesLinkedNoteIdExist(selectedId, notesMeta)) return;
+                    props.getNote(selectedId);
+                  } catch {
+                    props.setIsError(true);
+                  }
               }
 
               // Logout
               if (event.metaKey && event.key === 'Escape') {
                 event.preventDefault();
-                props.logout();
+                try {
+                  props.logout();
+                } catch {
+                  props.setIsError(true);
+                }
               }
 
               // ListView
@@ -198,13 +209,21 @@ const HunchEditor = (props) => {
               // Save Note
               if (event.metaKey && event.key === 's') {
                   event.preventDefault();
-                  props.saveNote();
+                  try {
+                    props.saveNote();
+                  } catch {
+                    props.deleteNote();
+                  }
               }
 
               // Delete Note
               if (event.metaKey && event.key === '\\') {
                 event.preventDefault();
-                props.deleteNote();
+                try {
+                  props.deleteNote();
+                } catch {
+                  props.setIsError(true);
+                }
               }
 
               // Title Block
@@ -354,7 +373,7 @@ const HunchEditor = (props) => {
                     { strikethrough: match ? false : true },
                     { match: n => Text.isText(n), split: match ? false : true}
                 );
-            }
+              }
 
 
             }}

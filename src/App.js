@@ -3,6 +3,7 @@ import LoginScreen from "./components/LoginScreen";
 import HunchApp from "./HunchApp";
 import RealmApolloProvider from "./graphql/RealmApolloProvider";
 import { useRealmApp, RealmAppProvider } from "./RealmApp";
+import ErrorBoundary from './components/ErrorBoundary';
 
 export const APP_ID = "hunchapp_staging-zipht";
 
@@ -15,12 +16,14 @@ const RequireLoggedInUser = ({ children }) => {
 export default function App() {
 
   return (
-    <RealmAppProvider appId={APP_ID}>
-      <RequireLoggedInUser >
-        <RealmApolloProvider>
-          <HunchApp />
-        </RealmApolloProvider>
-      </RequireLoggedInUser>
-    </RealmAppProvider>
+    <ErrorBoundary>
+      <RealmAppProvider appId={APP_ID}>
+        <RequireLoggedInUser >
+          <RealmApolloProvider>
+            <HunchApp />
+          </RealmApolloProvider>
+        </RequireLoggedInUser>
+      </RealmAppProvider>
+    </ErrorBoundary>
   );
 }

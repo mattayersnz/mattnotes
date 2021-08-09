@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from 'react-dom';
 import styled from "styled-components";
 import { Colours } from '../globalstyles/Colours';
-import { ObjectId } from "bson";
 
 
 export const NoteSuggest = ({
       list,
       getNote,
+      newNote,
       isSuggesting,
       setIsSuggesting,
       cursorPosition,
@@ -20,7 +20,9 @@ export const NoteSuggest = ({
       linkedNoteIds,
       saveNote,
       setLoadId,
-      updateUser
+      updateUser,
+      isError,
+      setIsError
     }) => {
 
     const items = list.filter(function (item) {
@@ -66,10 +68,10 @@ export const NoteSuggest = ({
     // Access text input
     const inputRef = useRef();
     useEffect(() => {
-      if (inputRef.current !== undefined) {
+      if (isTyping && textInput === '') {
         inputRef.current.focus();
       }
-    }, [inputRef.current])
+    }, [isTyping, textInput]);
 
     // Down Arrow
     useEffect(() => {
@@ -97,23 +99,25 @@ export const NoteSuggest = ({
     // Enter
     useEffect(() => {
       if (items.length && enterPress) {
-        items[cursor] && getNote(items[cursor]._id);
-        setIsSuggesting(false)
-        setIsTyping(false)
+        try {
+          items[cursor] && getNote(items[cursor]._id);
+          setIsSuggesting(false)
+          setIsTyping(false)
+        } catch {
+          setIsError(true);
+        }
       }
 
       if (items.length && enterPress && isTyping) {
-        const newId = new ObjectId();
-        saveNote();
-        //set users new last active note id
-        updateUser({ lastActiveNoteId: newId });
-        createNote(newId, createNewNoteBlocks(id, textInput));
-        setIsTyping(false);
-        setIsSuggesting(false);
-        setLoadId(newId);
-        window.scrollTo(0, 0);
+        try {
+          newNote(textInput);
+          setIsTyping(false);
+          setIsSuggesting(false);
+        } catch {
+          setIsError(true);
+        }
       }
-    }, [cursor, enterPress, items, getNote, setIsSuggesting, isTyping]);
+    }, [cursor, enterPress, items, getNote, setIsSuggesting, isTyping, newNote, setIsError, setIsTyping, textInput]);
 
     // Escape
     useEffect(() => {

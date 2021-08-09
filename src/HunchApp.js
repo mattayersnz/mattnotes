@@ -18,6 +18,8 @@ import {
 } from './scripts/noteHelpers';
 import ListView from './components/ListView';
 import Loading from './components/Loading';
+import ErrorPage from './components/ErrorPage';
+
 
 const Container = styled.div`
   margin: 25%;
@@ -47,6 +49,8 @@ export default function HunchApp() {
   const [prefix, setPrefix] = useState(null);
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isListView, setIsListView] = useState(false)
 
   useEffect(() => {
         const sel = window.getSelection();
@@ -82,9 +86,6 @@ export default function HunchApp() {
     setIsAction(false);
   }
 
-  //List View
-  const [isListView, setIsListView] = useState(false)
-
   const deleteNoteStart = () => {
     setIsAction(true);
     setActionType('delete');
@@ -100,7 +101,7 @@ export default function HunchApp() {
     updateNote(id, convertNoteToSaveFormat(note, value));
   }
 
-    const newNote = (selectedText) => {
+  const newNote = (selectedText) => {
     const newId = new ObjectId();
     createNote(newId, createNewNoteBlocks(id, selectedText));
     setLinkedNoteIds([...linkedNoteIds, newId.toString()])
@@ -118,7 +119,7 @@ export default function HunchApp() {
 
 //   useEffect(() => {
 //     if (isCreating) {
-      
+
 //     }
 //  }, [isCreating, createNote, setLoadId]);
 
@@ -170,36 +171,44 @@ export default function HunchApp() {
         isTyping={isTyping}
         setIsTyping={setIsTyping}
         isMetaDataLoading={loadingMeta}
+        isError={isError}
+        setIsError={setIsError}
       />
-      { isAction && <Action 
-        actionType={actionType} 
-        eventAction={actionType === 'logout' ? logout : deleteNoteFn} 
+      { isAction && <Action
+        actionType={actionType}
+        eventAction={actionType === 'logout' ? logout : deleteNoteFn}
         eventCancel={actionEnd}
       /> }
       { isListView && <ListView
-                        list={notes}
-                        getNote={GetNote}
-                        setIsListView={setIsListView}/> }
+        list={notes}
+        getNote={GetNote}
+        setIsListView={setIsListView}
+        isError={isError}
+        setIsError={setIsError}
+      /> }
       { isCommand && <Command /> }
+      { isError && <ErrorPage /> }
       { isSuggesting && cursorPosition && <NoteSuggest
-                                            newNote={newNote}
-                                            cursorPosition={cursorPosition}
-                                            getNote={GetNote}
-                                            list={notes}
-                                            setIsSuggesting={setIsSuggesting}
-                                            isTyping={isTyping}
-                                            setIsTyping={setIsTyping}
-                                            currentUser={currentUser}
-                                            createNote={createNote}
-                                            createNewNoteBlocks={createNewNoteBlocks}
-                                            id={id}
-                                            setLinkedNoteIds={setLinkedNoteIds}
-                                            linkedNoteIds={linkedNoteIds}
-                                            saveNote={saveNote}
-                                            setLoadId={setLoadId}
-                                            updateUser={updateUser}
-                                            activeNoteId={activeNoteId}
-                                            />}
+        newNote={newNote}
+        getNote={GetNote}
+        cursorPosition={cursorPosition}
+        list={notes}
+        setIsSuggesting={setIsSuggesting}
+        isTyping={isTyping}
+        setIsTyping={setIsTyping}
+        currentUser={currentUser}
+        createNote={createNote}
+        createNewNoteBlocks={createNewNoteBlocks}
+        id={id}
+        setLinkedNoteIds={setLinkedNoteIds}
+        linkedNoteIds={linkedNoteIds}
+        saveNote={saveNote}
+        setLoadId={setLoadId}
+        updateUser={updateUser}
+        activeNoteId={activeNoteId}
+        isError={isError}
+        setIsError={setIsError}
+        />}
     </Container>
   );
 }
