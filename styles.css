@@ -11,16 +11,18 @@ p {
   font-size: 18px;
 }
 
-a {
+.mail {
+  padding-top: 48px;
+  font-weight: bold;
   font-family: 'Roboto Mono', monospace;
   font-size: 18px;
   text-decoration: none;
   color: black;
 }
 
-.mail {
-  padding-top: 48px;
-  font-weight: bold;
+.mail:hover {
+  color: #4F4F4F;
+  cursor: pointer;
 }
 
 .container {
