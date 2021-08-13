@@ -6,6 +6,10 @@ h1 {
   font-weight: 600;
 }
 
+h1:hover {
+  cursor: pointer
+}
+
 p {
   font-family: 'Roboto Mono', monospace;
   font-size: 18px;
@@ -26,7 +30,7 @@ p {
 }
 
 .container {
-  padding-top: 6%;
+  padding-top: 10%;
   padding-bottom: 10%;
   padding-left: 20%;
   padding-right: 20%;
