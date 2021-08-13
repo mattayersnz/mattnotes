@@ -15,12 +15,40 @@ p {
   font-size: 18px;
 }
 
-.mail {
-  padding-top: 48px;
+label {
   font-weight: bold;
   font-family: 'Roboto Mono', monospace;
   font-size: 18px;
   text-decoration: none;
+  background: #fff;
+  color: black;
+}
+
+form {
+  margin-top: 64px;
+}
+
+textarea {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  padding: 5px;
+  width: 60vw;
+  height: 20vh;
+  font-weight: bold;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 18px;
+  text-decoration: none;
+  background: #fff;
+  color: black;
+  outline: none;
+}
+
+button {
+  font-weight: bold;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 18px;
+  text-decoration: none;
+  background: #fff;
   color: black;
 }
 
@@ -40,7 +68,10 @@ p {
   .container {
     padding-top: 10%;
     padding-bottom: 10%;
-    padding-left: 5%;
-    padding-right: 5%;
+    padding-left: 7%;
+    padding-right: 7%;
+  }
+  textarea {
+    width: 80vw;
   }
 }
