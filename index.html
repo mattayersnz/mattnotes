@@ -11,8 +11,9 @@
 </head>
 
 <body>
-  <div class="container" x-data="{ open: false }">
-    <h1 x-on:click="open = !open"> What is a Company? </h1>
+  <div class="container" x-data="{ open: true }">
+    <!-- <h1 x-on:click="open = !open">  -->
+      <h1> What is a Company? </h1>
     <div x-show="open">
       <p>My two sons [4yo, 2yo] and I had just left home in the car. We were talking about the other cars on the road around us, and I mentioned that they had all been created by companies. There was a logo on each car to indicate the company that made them. We drove along spotting Toyotas and Audis, Mazdas and Mitsubishis.</p>
       <p>Then my oldest son said, "Papa, what is a company?".</p>
@@ -36,9 +37,7 @@
       </div>
 
     </div>
-
-
-
+    
   </div>
 
 </body>
