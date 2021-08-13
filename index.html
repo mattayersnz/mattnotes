@@ -6,6 +6,7 @@
           window.location.href = "mailto:thoughtsformatt@gmail.com?subject=Thoughts on the post";
     }
   </script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body>
@@ -14,7 +15,7 @@
     <p>My two sons [4yo, 2yo] and I had just left home in the car. We were talking about the other cars on the road around us, and I mentioned that they had all been created by companies. There was a logo on each car to indicate the company that made them. We drove along spotting Toyotas and Audis, Mazdas and Mitsubishis.</p>
     <p>Then my oldest son said, "Papa, what is a company?".</p>
     <p>From my years back in business school, I knew that there were well formed responses to this question. But I also went to design school, and to my surprise I found that designers have an interesting take on creating a company.</p>
-    <p>Here is what I happened.</p>
+    <p>Here is what happened.</p>
     <p>I was heading into my final year of design school and heard of a new lecturer soon to arrive. A Brazilian man named Charles Bezerra.</p>
     <p>Charles was unassuming. He had an expression of curiosity, and way of conversation that indicated he really listened.</p>
     <p>He had been a professor at one of the top design schools in the world. One that worked at the intersection of design and business. The Illinois Institute of technology based in Chicago.</p>
@@ -31,6 +32,8 @@
     <div class="mail" onClick=redirect()>
       Send me your thoughts
     </div>
+
+    <h1 x-data="{ message: 'I love Alpine' }" x-text="message"></h1>
 
   </div>
 
