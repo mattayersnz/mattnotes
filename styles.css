@@ -4,6 +4,7 @@ h1 {
   font-family: 'Roboto Mono', monospace;
   font-size: 52px;
   font-weight: 600;
+  line-height: 120%;
 }
 
 h1:hover {
