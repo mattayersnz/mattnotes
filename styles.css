@@ -2,7 +2,7 @@
 
 h1 {
   font-family: 'Roboto Mono', monospace;
-  font-size: 48px;
+  font-size: 52px;
   font-weight: 600;
 }
 
@@ -13,6 +13,7 @@ h1:hover {
 p {
   font-family: 'Roboto Mono', monospace;
   font-size: 18px;
+  padding-bottom: 14px;
 }
 
 .container {
@@ -23,6 +24,9 @@ p {
 }
 
 @media only screen and (max-width: 680px) {
+  h1 {
+    font-size: 42px;
+  }
   .container {
     padding-top: 10%;
     padding-bottom: 10%;
