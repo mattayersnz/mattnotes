@@ -17,7 +17,7 @@
 <body>
   <div class="container" x-data="{ essay1: false, essay2: false, essay3: false, essay4: false }">
     <h1 @click="essay1 = ! essay1"> What is a Company? </h1>
-    <div x-show="essay1">
+    <div x-show="essay1" x-transition.duration.500ms>
       <p>My two sons and I had just left home in the car. We were talking about the other cars on the road around us, and I mentioned that they had all been created by companies. There was a logo on each car to indicate the company that made them. We drove along spotting Toyotas and Audis, Mazdas and Mitsubishis.</p>
       <p>Then my four year old son said, "Papa, what is a company?".</p>
       <p>From my years back in business school, I knew that there were well formed responses to this question. But I also went to design school, and to my surprise I found that designers have an interesting take on creating a company.</p>
@@ -41,7 +41,7 @@
 
 
     <h1 @click="essay2 = ! essay2"> What is a Service? </h1>
-    <div x-show="essay2">
+    <div x-show="essay2" x-transition.duration.500ms>
       <p>There is a story told in Christian tradition of a time when a man named Jesus did a small act that was surprising for his time and culture.</p>
       <p>Jesus was born in the Middle East in obscurity, but has now set the modern western calendar of BC and AD. He is understood by Christians as part of the character of God, a complex being who has formed all reality as we know it. So for Christians, the actions of this man are important.</p>
       <p>Jesus was an Israelite Rabbi, a respected teacher of his time. Rabbis would travel and teach with a group of people known as their disciples. A Rabbi would hold a certain status in the community and therefore would be treated with honour.</p>
@@ -66,7 +66,7 @@
     <br>
 
     <h1 @click="essay3 = ! essay3"> What is this world we live in? </h1>
-    <div x-show="essay3">
+    <div x-show="essay3" x-transition.duration.500ms>
       <p>I have two sons and I treasure them dearly. My oldest is currently five, and youngest just turned three.</p>
       <p>As a father there are so many books and discussions about the many things that we can teach our children. What is a bit less talked about is how much they teach us.</p>
       <p>For many years I have held an underlying assumption that in order to live well in the world, we must understand the world. The more we know about the world, the more we will know what to do in it.</p>
@@ -98,7 +98,7 @@
 
 
     <h1 @click="essay4 = ! essay4"> What could be done with a simple note app? </h1>
-    <div x-show="essay4">
+    <div x-show="essay4" x-transition.duration.500ms>
       <p>I'm building a note app with a friend called Nat. It's a little different than other note apps you may have tried. The note app is called Hunch, and it's built from a small fragile idea.</p>
       <p>You could say it's just a hunch.</p>
       <p>Here it is: "little things are as important as big things."</p>

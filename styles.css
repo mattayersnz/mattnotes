@@ -5,10 +5,16 @@ h1 {
   font-size: 44px;
   font-weight: 600;
   line-height: 120%;
+  transition: 2s;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 h1:hover {
-  cursor: pointer
+  cursor: pointer;
+  color: #6681CC;
 }
 
 p {
