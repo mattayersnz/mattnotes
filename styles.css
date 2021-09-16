@@ -56,9 +56,8 @@ input:active {
     padding-left: 7%;
     padding-right: 7%;
   }
-  
+
   h1:hover {
-    cursor: pointer;
     color: black;
   }
 }
